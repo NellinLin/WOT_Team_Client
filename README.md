@@ -1,10 +1,10 @@
 
-# WOT_TEAM_СLient
+# WOT_TEAM_Сlient
 #### Состав команды:
-  * [Ефименко Вадим](https://park.mail.ru/profile/va.efimenko/)
-  * [Русских Степан](https://park.mail.ru/profile/st.russkih/)
-  * [Рахимгалиев Темирлан](https://park.mail.ru/profile/t.rahimgaliev/)
-  * [Шишова Анастасия](https://park.mail.ru/profile/a.shishova/)
+  * [Ефименко Вадим](https://vk.com/vadikefim): <https://github.com/VadikEfimenko>
+  * [Русских Степан](https://vk.com/id159422594): <https://github.com/Defens1k>
+  * [Рахимгалиев Темирлан](https://vk.com/t.rakhimgaliev): <https://github.com/Rakhimgaliev>
+  * [Шишова Анастасия](https://vk.com/lin_nell): <https://github.com/NellinLin>
   
 #### Идея проекта:
   Танчики (мультиплеер).
