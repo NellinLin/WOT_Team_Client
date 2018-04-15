@@ -8,7 +8,7 @@
 	Положительное направление оси OY направлено ВНИЗ.
 	Положительное направление оси OX направлено Вправо.
 
-   myGraphics.hpp - описание.
+   myGraphics.hpp - описание..
    * class myTexture:
 	1) myTexture(std::string filepath) {}
 		Инициализация (filepath - путь к картинке).
