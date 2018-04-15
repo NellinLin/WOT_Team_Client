@@ -23,6 +23,10 @@
 2. Добавление команд стрельбы
 3. Добавление фич, интерфейса.
 
+# Для компиляции :
+   g++ -c main.cpp && g++ main.o -o main.out -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network && ./main.out
+
+
 # Графика от Темера:
    * ACHTUNG!
 	В окне "window" начало отсчета в левом ВЕРХНЕМ углу.
