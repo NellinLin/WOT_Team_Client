@@ -36,7 +36,6 @@
 
 	2) void setPossition(sf::RenderWindow &window, int x, int y) {}
 		Устанавливает текстуру на пиксель (x, y).
-
 	3) void move(sf::RenderWindow &window, int x, int y) {}
 		Двигает текстурку и принтит новое состояние.
 
