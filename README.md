@@ -8,6 +8,10 @@
 ![Show_Int2](img/Show_Int2.png)
 
 
+#### Идентификация
+![Show_Int3](img/Show_Int3.png)
+
+
 #### Окно PvP
 Скрывающее поле - ![Klaksa](pvp_draw/Klaksa.png)
 
