@@ -1,5 +1,6 @@
 # Для компиляции :
-   g++ -c main.cpp && g++ main.o -o main.out -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-audio && ./main.out
+   g++ -c main.cpp && g++ main.o -o main.out -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network && ./main.out
+
 
 # Графика от Темера:
    * ACHTUNG!

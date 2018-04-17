@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
@@ -31,7 +32,10 @@ int main() {
 	myTexture top("interface/top.png");
 
 	sf::RenderWindow window(sf::VideoMode(952, 650), "tan4iki");
-
+	sf::Music music;
+	if (!music.openFromFile("audio/mexican.ogg")) {
+		std::cout << "can't open audio" << std::endl;
+	}
 	// *_*
 
 	// Пример кода.
@@ -66,6 +70,7 @@ int main() {
 	}
 
 	Tank2_Up.setPossition(200, 200);
+	music.play();
 
 	while (window.isOpen()) {
 		sf::Event event;

@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
@@ -31,7 +32,11 @@ int main() {
 	myTexture top("interface/top.png");
 
 	sf::RenderWindow window(sf::VideoMode(952, 650), "tan4iki");
-
+	sf::Music music;
+	if (!music.openFromFile("audio/mexican.ogg")) {
+		std::cout << "can't open audio" << std::endl;
+	}
+	music.play();
 	// *_*
 
 	// Пример кода.
@@ -48,7 +53,7 @@ int main() {
 		Play.draw(window, 70, 250);
 		Setting.draw(window, 70, 350);
 		top.draw(window, 70, 450);
-		exit.draw(window, 850, 20);
+		exit.draw(window, 840, 20);
 		
 		if (exit.isPressed(window)) {
 			window.close();
