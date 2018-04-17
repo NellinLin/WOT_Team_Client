@@ -27,18 +27,21 @@ int main() {
 	myTexture exit("interface/exit.png");
 	myTexture Interf_1("interface/Interf_1.png");
 	myTexture Interf_2("interface/Interf_2.png");
+	myTexture Interf_3("interface/Interf_3.png");
 	myTexture Play("interface/Play.png");
 	myTexture Setting("interface/Settings.png");
 	myTexture top("interface/top.png");
 
 	sf::RenderWindow window(sf::VideoMode(952, 650), "tan4iki");
-	sf::Music music;
-	if (!music.openFromFile("audio/mexican.ogg")) {
-		std::cout << "can't open audio" << std::endl;
-	}
 	// *_*
 
 	// Пример кода.
+
+	window.clear();
+	Interf_1.draw(window);
+	window.display();
+	sf::sleep(sf::seconds(5));
+
 	int id = 0;
 	while (window.isOpen() && !id) {
 		sf::Event event;
@@ -70,6 +73,10 @@ int main() {
 	}
 
 	Tank2_Up.setPossition(200, 200);
+	sf::Music music;
+	if (!music.openFromFile("audio/mexican.ogg")) {
+		std::cout << "can't open audio" << std::endl;
+	}
 	music.play();
 
 	while (window.isOpen()) {
