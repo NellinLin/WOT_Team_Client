@@ -25,6 +25,10 @@ class myTexture {
 		~myTexture() {
 		}
 
+		void setPossition(int x, int y) {
+			Obj_Sprite.setPosition(x, y);
+		}
+
 		void move(sf::RenderWindow &window, int x, int y) {
 			Obj_Sprite.move(x, y);
 			window.draw(Obj_Sprite);
@@ -50,10 +54,6 @@ class myTexture {
 				return 0;
 			}
 			return 0;
-		}
-
-		void setPossition(int x, int y) {
-			Obj_Sprite.setPosition(x, y);
 		}
 };
 

@@ -40,7 +40,7 @@ int main() {
 	window.clear();
 	Interf_1.draw(window);
 	window.display();
-	sf::sleep(sf::seconds(5));
+	sf::sleep(sf::seconds(3));
 
 	int id = 0;
 	while (window.isOpen() && !id) {

@@ -38,9 +38,9 @@ int main() {
 	// Пример кода.
 
 	window.clear();
-	Interf_3.draw(window);
+	Interf_1.draw(window);
 	window.display();
-	sf::sleep(sf::seconds(2));
+	sf::sleep(sf::seconds(3));
 
 	int id = 0;
 	while (window.isOpen() && !id) {
