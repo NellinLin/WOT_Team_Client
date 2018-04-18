@@ -8,6 +8,10 @@
 ![Show_Int2](img/Show_Int2.png)
 
 
+#### Меню "Настройки"
+![Show_Int4](img/Show_Int4.png)
+
+
 #### Идентификация
 ![Show_Int3](img/Show_Int3.png)
 
