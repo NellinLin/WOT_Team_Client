@@ -9,7 +9,7 @@
 
    myGraphics.hpp - описание..
    * class myTexture:
-	1) myTexture(std::string filepath) {}
+	1) myTexture(std::string filepath[4]) {}
 		Инициализация (filepath - путь к картинке).
 
 	2) void setPossition(sf::RenderWindow &window, int x, int y) {}
@@ -28,7 +28,7 @@
 		Проверяет, нажал ли пользователь на текстурку левой. кнопкой мыши
    * int key_id() {}
 	выводит id нажатой клавишы
-		1 - Up,
-		2 - Right,
-		3 - Down,
-		4 - Left.
+		1 - Up/W,
+		2 - Right/D,
+		3 - Down/S,
+		4 - Left/A.

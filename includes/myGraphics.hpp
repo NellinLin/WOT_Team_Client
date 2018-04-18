@@ -1,7 +1,51 @@
 #include <SFML/Graphics.hpp>
+#include <vector>
 #include <iostream>
-#include <stdio.h>
 #include <string.h>
+
+class Tank {
+	public:
+		sf::Image Obj_Image[4];
+		sf::Texture Obj_Texture[4];
+		sf::Sprite Obj_Sprite[4];
+
+		Tank(std::string filepath[4]) {
+			for (int i = 0; i < 4; i++) {
+				if (!Obj_Image[i].loadFromFile(filepath[i])) {
+					return;
+				}
+				if (!Obj_Texture[i].loadFromImage(Obj_Image[i])) {
+					return;
+				}
+				Obj_Sprite[i].setTexture(Obj_Texture[i]);
+				setPossition(0, 0);
+			}
+		}
+
+		~Tank() {
+		}
+
+		void setPossition(int x, int y) {
+			for (int i = 0; i < 4; i++) {
+				Obj_Sprite[i].setPosition(x, y);
+			}
+		}
+
+		void draw(sf::RenderWindow &window, int x, int y, int id) {
+			setPossition(x, y);
+			if ((id < 4) && (id >= 0)) {
+				window.draw(Obj_Sprite[id]);
+			}
+		}
+
+		void draw(sf::RenderWindow &window, int id) {
+			if ((id < 4) && (id >= 0)) {
+				window.draw(Obj_Sprite[id]);
+			}
+		}
+};
+
+
 
 class myTexture {
 	public:
@@ -57,18 +101,19 @@ class myTexture {
 		}
 };
 
+
 int key_id() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-		return 1;
+		return 0;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-		return 2;
+		return 1;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-		return 3;
+		return 2;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-		return 4;
+		return 3;
 	}
 	return -1;
 }

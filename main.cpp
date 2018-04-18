@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
+
 #include "includes/myGraphics.hpp"
 
 int main() {
@@ -14,15 +15,11 @@ int main() {
 	myTexture Nerush_Blok("pvp_draw/Nerush_blok.png");
 	myTexture Strelka("pvp_draw/Strelka.png");
 
-	myTexture Tank1_Up("pvp_draw/t011.png");
-	myTexture Tank1_Right("pvp_draw/t021.png");
-	myTexture Tank1_Down("pvp_draw/t031.png");
-	myTexture Tank1_Left("pvp_draw/t041.png");
+	std::string tank1[4] = {"pvp_draw/t011.png", "pvp_draw/t021.png", "pvp_draw/t031.png", "pvp_draw/t041.png"};
+	Tank Tank1(tank1);
 
-	myTexture Tank2_Up("pvp_draw/t012.png");
-	myTexture Tank2_Right("pvp_draw/t022.png");
-	myTexture Tank2_Down("pvp_draw/t032.png");
-	myTexture Tank2_Left("pvp_draw/t042.png");
+	std::string tank2[4] = {"pvp_draw/t011.png", "pvp_draw/t022.png", "pvp_draw/t032.png", "pvp_draw/t042.png"};
+	Tank Tank2(tank2);
 
 	myTexture exit("interface/exit.png");
 	myTexture Interf_1("interface/Interf_1.png");
@@ -40,8 +37,7 @@ int main() {
 	window.clear();
 	Interf_1.draw(window);
 	window.display();
-	sf::sleep(sf::seconds(3));
-
+	sf::sleep(sf::seconds(1.5));
 	int id = 0;
 	while (window.isOpen() && !id) {
 		sf::Event event;
@@ -72,16 +68,16 @@ int main() {
 		return 0;
 	}
 
-	Tank2_Up.setPossition(200, 200);
 	sf::Music music;
-	if (!music.openFromFile("audio/mexican.ogg")) {
+	if (!music.openFromFile("audio/7NatArmy.ogg")) {
 		std::cout << "can't open audio" << std::endl;
 	}
 	music.play();
 
-	int x = 200;
+	int x = 197;
 	int y = 200;
-	int side = 1;
+	Tank2.setPossition(x, y);
+	int side = 0;
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -90,47 +86,61 @@ int main() {
 				window.close();
 			}
 		}
+
+		while ((id = key_id()) == 0) {
+			if (event.type == sf::Event::Closed) {
+				window.close();
+			}
+			y += -1;
+			window.clear();
+			Game_Board.draw(window);
+			Tank2.draw(window, x, y, id);
+			window.display();
+			sf::sleep(sf::seconds(1.0 / 30));
+			side = 0;
+		}
+
+		while ((id = key_id()) == 1) {
+			if (event.type == sf::Event::Closed) {
+				window.close();
+			}
+			x += 1;
+			window.clear();
+			Game_Board.draw(window);
+			Tank2.draw(window, x, y, id);
+			window.display();
+			sf::sleep(sf::seconds(1.0 / 30));
+			side = 1;
+		}
+		while ((id = key_id()) == 2) {
+			if (event.type == sf::Event::Closed) {
+				window.close();
+			}
+			y += 1;
+			window.clear();
+			Game_Board.draw(window);
+			Tank2.draw(window, x, y, id);
+			window.display();
+			sf::sleep(sf::seconds(1.0 / 50));
+			side = 2;
+		}
+		while ((id = key_id()) == 3) {
+			if (event.type == sf::Event::Closed) {
+				window.close();
+			}
+			x += -1;
+			window.clear();
+			Game_Board.draw(window);
+			Tank2.draw(window, x, y, id);
+			window.display();
+			sf::sleep(sf::seconds(1.0 / 50));
+			side = 3;
+		}
 		window.clear();
 		Game_Board.draw(window);
-
-		switch (key_id()) {
-			case 1 :
-				y += -1;
-				Tank2_Up.draw(window, x, y);
-				side = 1;
-				break;
-			case 2 :
-				x += 1;
-				Tank2_Right.draw(window, x, y);
-				side = 2;
-				break;
-			case 3 :
-				y += 1;
-				Tank2_Down.draw(window, x, y);
-				side = 3;
-				break;
-			case 4 :
-				x += -1;
-				Tank2_Left.draw(window, x, y);
-				side = 4;
-				break;
-			case -1 :
-				switch (side) {
-					case 1 :
-						Tank2_Up.draw(window);
-						break;
-					case 2 :
-						Tank2_Right.draw(window);
-						break;
-					case 3 :
-						Tank2_Down.draw(window);
-						break;
-					case 4 :
-						Tank2_Left.draw(window);
-				};
-		};
-
+		Tank2.draw(window, side);
 		window.display();
+		sf::sleep(sf::seconds(0.001));
 	}
 
 	return 0;

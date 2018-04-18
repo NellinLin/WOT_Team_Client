@@ -8,6 +8,10 @@
 	Положительное направление оси OX направлено Вправо.
 
    myGraphics.hpp - описание..
+
+   * Class Tank {}
+	TODO: Описать класс;
+
    * class myTexture:
 	1) myTexture(std::string filepath) {}
 		Инициализация (filepath - путь к картинке).
