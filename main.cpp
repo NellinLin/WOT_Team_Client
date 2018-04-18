@@ -56,7 +56,7 @@ int main() {
 		Setting.draw(window, 70, 350);
 		top.draw(window, 70, 450);
 		exit.draw(window, 840, 20);
-		
+
 		if (exit.isPressed(window)) {
 			window.close();
 		}
@@ -79,6 +79,10 @@ int main() {
 	}
 	music.play();
 
+	int x = 200;
+	int y = 200;
+	int side = 1;
+
 	while (window.isOpen()) {
 		sf::Event event;
 		while (window.pollEvent(event)) {
@@ -88,23 +92,43 @@ int main() {
 		}
 		window.clear();
 		Game_Board.draw(window);
-		Tank2_Up.draw(window);
-		Tank2_Right.draw(window, 200, 100);
-		Tank2_Down.draw(window, 300, 100);
-		Tank2_Left.draw(window, 400, 100);
 
-		if (key_id() == 1) {
-			Tank2_Up.move(window, 0, -1);
-		}
-		if (key_id() == 2) {
-			Tank2_Up.move(window, 1, 0);
-		}
-		if (key_id() == 3) {
-			Tank2_Up.move(window, 0, 1);
-		}
-		if (key_id() == 4) {
-			Tank2_Up.move(window, -1, 0);
-		}
+		switch (key_id()) {
+			case 1 :
+				y += -1;
+				Tank2_Up.draw(window, x, y);
+				side = 1;
+				break;
+			case 2 :
+				x += 1;
+				Tank2_Right.draw(window, x, y);
+				side = 2;
+				break;
+			case 3 :
+				y += 1;
+				Tank2_Down.draw(window, x, y);
+				side = 3;
+				break;
+			case 4 :
+				x += -1;
+				Tank2_Left.draw(window, x, y);
+				side = 4;
+				break;
+			case -1 :
+				switch (side) {
+					case 1 :
+						Tank2_Up.draw(window);
+						break;
+					case 2 :
+						Tank2_Right.draw(window);
+						break;
+					case 3 :
+						Tank2_Down.draw(window);
+						break;
+					case 4 :
+						Tank2_Left.draw(window);
+				};
+		};
 
 		window.display();
 	}
