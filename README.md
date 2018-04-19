@@ -12,6 +12,10 @@
 ![Show_Int4](img/Show_Int4.png)
 
 
+#### Меню "Рейтинг"
+![Show_Int7](img/Show_Int7.png)
+
+
 #### Идентификация
 ![Show_Int3](img/Show_Int3.png)
 
@@ -29,4 +33,12 @@
 
 Time - время с начала партии.
 ![Board](img/Board.png)
+
+
+#### Победа
+![Show_Interf_5](img/Show_Interf_5.png)
+
+
+#### Проигрыш
+![Show_Int6](img/Show_Int6.png)
 
