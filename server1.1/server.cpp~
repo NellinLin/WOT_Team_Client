@@ -1,0 +1,20 @@
+#include <SFML/Network.hpp>
+#include <iostream>
+
+int main() {
+	sf::TcpListener listener;
+	if (listener.listen(8002) != sf::Socket::Done) {
+	}
+
+	sf::TcpSocket client;
+	while (listener.accept(client) != sf::Socket::Done) {
+	}
+
+	std::cout << "Client connected" << std::endl;
+	int i = 0;
+	std::cin >> i;
+	while (i != 2) {
+		std::cin >> i;
+	}
+	return 0;
+}

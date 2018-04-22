@@ -49,8 +49,8 @@ int main() {
 		window.clear();
 		Interf_2.draw(window, 0, 0);
 		Play.draw(window, 70, 250);
-		Setting.draw(window, 70, 350);
-		top.draw(window, 70, 450);
+		Setting.draw(window, 70, 370);
+		top.draw(window, 70, 490);
 		exit.draw(window, 840, 20);
 
 		if (exit.isPressed(window)) {
@@ -74,10 +74,11 @@ int main() {
 	}
 	music.play();
 
-	int x = 197;
-	int y = 200;
+	int x = 723;
+	int y = 600;
 	Tank2.setPossition(x, y);
 	int side = 0;
+	int num_of_tank = 1;
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -94,9 +95,15 @@ int main() {
 			y += -1;
 			window.clear();
 			Game_Board.draw(window);
-			Tank2.draw(window, x, y, id);
+			if (num_of_tank == 1) {
+				Tank1.draw(window, x, y, id);
+				num_of_tank = 2;
+			} else {
+				Tank2.draw(window, x, y, id);
+				num_of_tank = 1;
+			}
 			window.display();
-			sf::sleep(sf::seconds(1.0 / 30));
+			sf::sleep(sf::seconds(1.0 / 50));
 			side = 0;
 		}
 
@@ -107,9 +114,15 @@ int main() {
 			x += 1;
 			window.clear();
 			Game_Board.draw(window);
-			Tank2.draw(window, x, y, id);
+			if (num_of_tank == 1) {
+				Tank1.draw(window, x, y, id);
+				num_of_tank = 2;
+			} else {
+				Tank2.draw(window, x, y, id);
+				num_of_tank = 1;
+			}
 			window.display();
-			sf::sleep(sf::seconds(1.0 / 30));
+			sf::sleep(sf::seconds(1.0 / 50));
 			side = 1;
 		}
 		while ((id = key_id()) == 2) {
@@ -119,7 +132,13 @@ int main() {
 			y += 1;
 			window.clear();
 			Game_Board.draw(window);
-			Tank2.draw(window, x, y, id);
+			if (num_of_tank == 1) {
+				Tank1.draw(window, x, y, id);
+				num_of_tank = 2;
+			} else {
+				Tank2.draw(window, x, y, id);
+				num_of_tank = 1;
+			}
 			window.display();
 			sf::sleep(sf::seconds(1.0 / 50));
 			side = 2;
@@ -131,7 +150,13 @@ int main() {
 			x += -1;
 			window.clear();
 			Game_Board.draw(window);
-			Tank2.draw(window, x, y, id);
+			if (num_of_tank == 1) {
+				Tank1.draw(window, x, y, id);
+				num_of_tank = 2;
+			} else {
+				Tank2.draw(window, x, y, id);
+				num_of_tank = 1;
+			}
 			window.display();
 			sf::sleep(sf::seconds(1.0 / 50));
 			side = 3;

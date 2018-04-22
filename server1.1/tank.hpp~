@@ -1,0 +1,45 @@
+
+
+class Tank {
+	public:
+		int x, y;
+
+		Tank(int posX, int posY) {
+			x = posX;
+			y = posY;
+		}
+
+		~Tank;
+
+		getPossition(int posX, int posY) {
+			posX = x;
+			posY = y;
+		}
+
+		void align() {
+			if (x % 26 < 12) {
+				x = x - x % 26;
+			} else {
+				x = x - x % 26 + 1;
+			}
+			if (y % 26 < 12) {
+				y = y - y % 26;
+			} else {
+				y = y - y % 26 + 1;
+			}
+		}
+
+		int move(int posX, int posY) {
+			if ((posX < 0) || (posX > 600) {
+				return 0;
+			}
+			if ((posY < 0) || (posY > 600) {
+				return 0;
+			}
+			x = posX;
+			y = posY;
+			return 1;
+		}
+
+
+};

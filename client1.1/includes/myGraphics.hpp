@@ -3,8 +3,14 @@
 #include <iostream>
 #include <string.h>
 
+#define biasX 148
+
 class Tank {
 	public:
+		int x;
+		int y;
+		int hp;
+
 		sf::Image Obj_Image[4];
 		sf::Texture Obj_Texture[4];
 		sf::Sprite Obj_Sprite[4];
@@ -19,21 +25,34 @@ class Tank {
 				}
 				Obj_Sprite[i].setTexture(Obj_Texture[i]);
 				setPossition(0, 0);
+				hp = 3;
 			}
 		}
 
 		~Tank() {
 		}
 
-		void setPossition(int x, int y) {
+		void move(int dx, int dy) {
+			x += dx;
+			y += dy;
 			for (int i = 0; i < 4; i++) {
-				Obj_Sprite[i].setPosition(x, y);
+				Obj_Sprite[i].move(dx, dy);
 			}
 		}
 
-		void draw(sf::RenderWindow &window, int x, int y, int id) {
-			setPossition(x, y);
+		void setPossition(int posX, int posY) {
+			x = posX - biasX;
+			y = posY;
+			for (int i = 0; i < 4; i++) {
+				Obj_Sprite[i].setPosition(posX, posY);
+			}
+		}
+
+		void draw(sf::RenderWindow &window, int posX, int posY, int id) {
 			if ((id < 4) && (id >= 0)) {
+				setPossition(posX, posY);
+				x = posX - biasX;
+				y = posY;
 				window.draw(Obj_Sprite[id]);
 			}
 		}
@@ -44,8 +63,6 @@ class Tank {
 			}
 		}
 };
-
-
 
 class myTexture {
 	public:
@@ -71,11 +88,6 @@ class myTexture {
 
 		void setPossition(int x, int y) {
 			Obj_Sprite.setPosition(x, y);
-		}
-
-		void move(sf::RenderWindow &window, int x, int y) {
-			Obj_Sprite.move(x, y);
-			window.draw(Obj_Sprite);
 		}
 
 		void draw(sf::RenderWindow &window, int x, int y) {
@@ -114,6 +126,9 @@ int key_id() {
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 		return 3;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+		return 4;
 	}
 	return -1;
 }
