@@ -1,20 +1,28 @@
+// Client1
+
 #include <SFML/Graphics.hpp>
-#include <vector>
 #include <iostream>
 #include <string.h>
-
+#include <math.h>
 #define biasX 148
 
-class Tank {
+class ActiveTexture {
 	public:
 		int x;
 		int y;
+
+		int hp;
+		int side;
+		bool Exists;
+
+		int x1;
+		int y1;
 
 		sf::Image Obj_Image[4];
 		sf::Texture Obj_Texture[4];
 		sf::Sprite Obj_Sprite[4];
 
-		Tank(std::string filepath[4]) {
+		ActiveTexture(std::string filepath[4]) {
 			for (int i = 0; i < 4; i++) {
 				if (!Obj_Image[i].loadFromFile(filepath[i])) {
 					return;
@@ -25,14 +33,17 @@ class Tank {
 				Obj_Sprite[i].setTexture(Obj_Texture[i]);
 				setPossition(0, 0);
 			}
+			hp = 3;
+			side = 0;
+			Exists = true;
+			x1 = 0;
+			y1 = 0;
 		}
 
-		~Tank() {
+		~ActiveTexture() {
 		}
 
-		void move(int dx, int dy) {
-			x += dx;
-			y += dy;
+		void move (int dx, int dy) {
 			for (int i = 0; i < 4; i++) {
 				Obj_Sprite[i].move(dx, dy);
 			}
@@ -42,7 +53,7 @@ class Tank {
 			x = posX - biasX;
 			y = posY;
 			for (int i = 0; i < 4; i++) {
-				Obj_Sprite[i].setPosition(posX, posY);
+				Obj_Sprite[i].setPosition(posX + biasX, posY);
 			}
 		}
 
@@ -52,23 +63,40 @@ class Tank {
 				x = posX - biasX;
 				y = posY;
 				window.draw(Obj_Sprite[id]);
+				side = id;
+			}
+		}
+
+		void draw(sf::RenderWindow &window, int posX, int posY) {
+			if ((side < 4) && (side >= 0)) {
+				setPossition(posX, posY);
+				x = posX - biasX;
+				y = posY;
+				window.draw(Obj_Sprite[side]);
 			}
 		}
 
 		void draw(sf::RenderWindow &window, int id) {
 			if ((id < 4) && (id >= 0)) {
 				window.draw(Obj_Sprite[id]);
+				side = id;
+			}
+		}
+
+		void draw(sf::RenderWindow &window) {
+			if ((side < 4) && (side >= 0)) {
+				window.draw(Obj_Sprite[side]);
 			}
 		}
 };
 
-class myTexture {
+class StaticTexture {
 	public:
 		sf::Image Obj_Image;
 		sf::Texture Obj_Texture;
 		sf::Sprite Obj_Sprite;
 
-		myTexture(std::string filepath) {
+		StaticTexture(std::string filepath) {
 			if (!Obj_Image.loadFromFile(filepath)) {
 				return;
 			}
@@ -81,7 +109,7 @@ class myTexture {
 			Obj_Sprite.setPosition(0, 0);
 		}
 
-		~myTexture() {
+		~StaticTexture() {
 		}
 
 		void setPossition(int x, int y) {
@@ -130,3 +158,23 @@ int key_id() {
 	}
 	return -1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
