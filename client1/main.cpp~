@@ -123,18 +123,28 @@ int main() {
 		packet << id;
 		server.send(packet);
 		server.receive(packet);
-		packet >> Textures[T1].x1 >> Textures[T1].y1 >> Textures[T1].side >> Textures[T2].x1 >> Textures[T2].y1 >> Textures[T2].side;
+		packet >> Textures[T1].x1 >> Textures[T1].y1 >> Textures[T1].side >> Textures[T1].hp
+			>> Textures[T2].x1 >> Textures[T2].y1 >> Textures[T2].side >> Textures[T2].hp
+			>> Textures[S1].Exists >>Textures[S1].x1 >> Textures[S1].y1 >> Textures[S1].side
+			>> Textures[S2].Exists >>Textures[S2].x1 >> Textures[S2].y1 >> Textures[S2].side;
 		packet.clear();
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < Textures.size(); j++) {
-				if (Textures[j].Exists) {
-					int dx = (Textures[j].x1 - Textures[j].x + biasX) / 3;
-					int dy = (Textures[j].y1 - Textures[j].y) / 3;
-					Textures[j].move(dx, dy);
-				}
+
+		/*window.clear();
+		for (int j = 0; j < Textures.size(); j++) {
+			if (Textures[j].Exists) {
+				int dx = (Textures[j].x1 - Textures[j].x + biasX) / 2;
+				int dy = (Textures[j].y1 - Textures[j].y) / 2;
+				Textures[j].move(dx, dy);
 			}
-			sf::sleep(sf::milliseconds(7));
 		}
+		for (int i = 0; i < Textures.size(); i++) {
+			if (Textures[i].Exists) {
+				Textures[i].draw(window);
+			}
+		}
+		window.display();
+		sf::sleep(sf::milliseconds(15));*/
+
 		for (int i = 0; i < Textures.size(); i++) {
 			Textures[i].setPossition(Textures[i].x1, Textures[i].y1);
 		}
@@ -147,7 +157,7 @@ int main() {
 			}
 		}
 		window.display();
-		sf::sleep(sf::milliseconds(7));
+		sf::sleep(sf::milliseconds(15));
 	}
 
 	return 0;
