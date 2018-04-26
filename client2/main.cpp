@@ -26,6 +26,9 @@ int main() {
 	StaticTexture Interf_1("interface/Interf_1.png");
 	StaticTexture Interf_2("interface/Interf_2.png");
 	StaticTexture Interf_3("interface/Interf_3.png");
+	StaticTexture Interf_4("interface/Interf_4.png");
+	StaticTexture Off_music("interface/Off.png");
+	StaticTexture On_music("interface/On.png");
 	StaticTexture Play("interface/Play.png");
 	StaticTexture Setting("interface/Settings.png");
 	StaticTexture top("interface/top.png");
@@ -148,7 +151,6 @@ int main() {
 		for (int i = 0; i < Textures.size(); i++) {
 			Textures[i].setPossition(Textures[i].x1, Textures[i].y1);
 		}
-		packet.clear();
 		window.clear();
 		Game_Board.draw(window);
 		for (int i = 0; i < Textures.size(); i++) {

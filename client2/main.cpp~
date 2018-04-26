@@ -129,7 +129,7 @@ int main() {
 			>> Textures[S2].Exists >>Textures[S2].x1 >> Textures[S2].y1 >> Textures[S2].side;
 		packet.clear();
 
-		window.clear();
+		/*window.clear();
 		for (int j = 0; j < Textures.size(); j++) {
 			if (Textures[j].Exists) {
 				int dx = (Textures[j].x1 - Textures[j].x + biasX) / 2;
@@ -143,12 +143,11 @@ int main() {
 			}
 		}
 		window.display();
-		sf::sleep(sf::milliseconds(15));
+		sf::sleep(sf::milliseconds(15));*/
 
 		for (int i = 0; i < Textures.size(); i++) {
 			Textures[i].setPossition(Textures[i].x1, Textures[i].y1);
 		}
-		packet.clear();
 		window.clear();
 		Game_Board.draw(window);
 		for (int i = 0; i < Textures.size(); i++) {
