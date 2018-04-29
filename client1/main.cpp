@@ -94,7 +94,7 @@ int main() {
 	// music.play();
 
 	sf::TcpSocket server;
-	sf::Socket::Status status = server.connect("127.0.1.1", 8022);
+	sf::Socket::Status status = server.connect("127.0.0.1", 9000);
 
 	if (status != sf::Socket::Done) {
 		window.close();

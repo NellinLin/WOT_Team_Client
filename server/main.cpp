@@ -12,7 +12,7 @@ int main() {
 	sf::Time fps = sf::milliseconds(31);
 
 	sf::TcpListener listener;
-	if (listener.listen(8022) != sf::Socket::Done) {
+	if (listener.listen(9000) != sf::Socket::Done) {
 		return -2;
 	}
 

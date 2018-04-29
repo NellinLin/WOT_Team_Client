@@ -12,7 +12,7 @@ int main() {
 	sf::Time fps = sf::milliseconds(31);
 
 	sf::TcpListener listener;
-	if (listener.listen(8022) != sf::Socket::Done) {
+	if (listener.listen(9000) != sf::Socket::Done) {
 		return -2;
 	}
 
@@ -56,6 +56,7 @@ int main() {
 			<< Tank2.x << Tank2.y << Tank2.side << Tank2.hp
 			<< Shell1.Exists << Shell1.x << Shell1.y << Shell1.side
 			<< Shell2.Exists << Shell2.x << Shell2.y << Shell2.side;
+
 		client1.send(packet);
 		client2.send(packet);
 		packet.clear();
