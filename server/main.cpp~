@@ -1,64 +1,94 @@
 // SERVER
 #include <SFML/Network.hpp>
 #include <iostream>
+#include <vector>
 #include "includes/tank.hpp"
 
+const int n = 2;
+
 int main() {
-	Tank Tank1(0, 0);
-	Tank Tank2(200, 600);
-	Shell Shell1;
-	Shell Shell2;
+	int n = 2;
+	std::vector<Tank> Tanks(n);
+
+	Tanks[0].setPossition(0, 0);
+	Tanks[1].setPossition(200, 200);
+
+	sf::TcpSocket clients[n];
+
+	int** map;
+	map = (int**)malloc(rows * sizeof(int*));
+	for (int i = 0; i < rows; i++) {
+		map[i] = (int*)malloc(cols * sizeof(int));
+	}
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			map[i][j] = -1;
+		}
+	}
+	map[25][25] = 1;
+	map[15][15] = 1;
 
 	sf::Time fps = sf::milliseconds(31);
 
 	sf::TcpListener listener;
-	if (listener.listen(9000) != sf::Socket::Done) {
+	if (listener.listen(9002) != sf::Socket::Done) {
 		return -2;
 	}
 
-	sf::TcpSocket client1;
-	sf::TcpSocket client2;
-	while ((listener.accept(client1) != sf::Socket::Done)) {
+	for (int i = 0; i < n; i++) {
+		while ((listener.accept(clients[i]) != sf::Socket::Done)) {
+		}
+		std::cout << i << " Client connected" << std::endl;
 	}
-	std::cout << "Client1 connected" << std::endl;
 
-	while ((listener.accept(client2) != sf::Socket::Done)) {
-	}
-	std::cout << "Client2 connected" << std::endl;
-
-	int id1 = 0;
-	int id2 = 0;
 	sf::Packet packet;
 
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			std::cout << map[i][j];
+		}
+		std::cout << std::endl;
+	}
+
 	while (true) {
-		client1.receive(packet);
-		packet >> id1;
-		if (id1 == 100) {
-			client1.disconnect();
-			client2.disconnect();
-			return 0;
+		for (int i = 0; i < n; i++) {
+			packet.clear();
+			clients[i].receive(packet);
+			packet >> Tanks[i].id;
+			if (Tanks[i].id == 100) {
+				for (int j = 0; j < n; j++) {
+					clients[j].disconnect();
+				}
+				return 0;
+			}
 		}
-		packet.clear();
 
-		client2.receive(packet);
-		packet >> id2;
-		if (id2 == 100) {
-			client1.disconnect();
-			client2.disconnect();
-			return 0;
+		move_all(Tanks, map);
+
+		packet.clear();
+		for (int i = 0; i < Tanks.size(); i++) {
+			packet << Tanks[i].x << Tanks[i].y << Tanks[i].side << Tanks[i].hp;
 		}
-		move_Tanks(Tank1, id1, Tank2, id2, Shell1, Shell2);
-		move_Shell(Shell1, Tank2);
-		move_Shell(Shell2, Tank1);
-		packet.clear();
+		for (int i = 0; i < Tanks.size(); i++) {
+			packet << Tanks[i].shell.x << Tanks[i].shell.y << Tanks[i].shell.side << Tanks[i].shell.Exists;
+		}
 
-		packet << Tank1.x << Tank1.y << Tank1.side << Tank1.hp 
-			<< Tank2.x << Tank2.y << Tank2.side << Tank2.hp
-			<< Shell1.Exists << Shell1.x << Shell1.y << Shell1.side
-			<< Shell2.Exists << Shell2.x << Shell2.y << Shell2.side;
+		for (int i = 0; i < Tanks.size(); i++) {
+			if ((Tanks[i].shell.cellX1 > 0) && (Tanks[i].shell.cellX1 < cols) && (Tanks[i].shell.cellY1 > 0) && (Tanks[i].shell.cellY1 < rows)) {
+				packet << Tanks[i].shell.cellX1 << Tanks[i].shell.cellY1;
+				Tanks[i].shell.cellX1 = -1;
+				Tanks[i].shell.cellY1 = -1;
+			}
+			if ((Tanks[i].shell.cellX2 > 0) && (Tanks[i].shell.cellX2 < cols) && (Tanks[i].shell.cellY2 > 0) && (Tanks[i].shell.cellY2 < rows)) {
+				packet << Tanks[i].shell.cellX2 << Tanks[i].shell.cellY2;
+				Tanks[i].shell.cellX2 = -1;
+				Tanks[i].shell.cellY2 = -1;
+			}
+		}
 
-		client1.send(packet);
-		client2.send(packet);
+		for (int i = 0; i < n; i++) {
+			clients[i].send(packet);
+		}
 		packet.clear();
 		sleep(fps);
 	}

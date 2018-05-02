@@ -8,11 +8,8 @@
 
 #include "includes/myGraphics.hpp"
 
-#define biasX 148
-#define T1 0  // Indexes of ActiveTexture
-#define T2 1
-#define S1 2
-#define S2 3
+#define rows 26
+#define cols 26
 
 int main() {
 	StaticTexture Game_Board("pvp_draw/Game_Board.png");
@@ -43,12 +40,29 @@ int main() {
 	ActiveTexture Shell1(shell);
 	ActiveTexture Shell2(shell);
 
-	std::vector<ActiveTexture> Textures;
-	Textures.push_back(Tank1);
-	Textures.push_back(Tank2);
-	Textures.push_back(Shell1);
-	Textures.push_back(Shell2);
+	std::vector<ActiveTexture> Tanks;
+	Tanks.push_back(Tank1);
+	Tanks.push_back(Tank2);
 
+	std::vector<ActiveTexture> Shells;
+	Shells.push_back(Shell1);
+	Shells.push_back(Shell2);
+	for (int i = 0; i < Shells.size(); i++) {
+		Shells[i].biasX += 25;
+	}
+
+	int** map;
+	map = (int**)malloc(rows * sizeof(int*));
+	for (int i = 0; i < rows; i++) {
+		map[i] = (int*)malloc(cols * sizeof(int));
+	}
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			map[i][j] = -1;
+		}
+	}
+	map[25][25] = 1;
+	map[15][15] = 1;
 
 	sf::RenderWindow window(sf::VideoMode(952, 650), "tan4iki");
 
@@ -94,17 +108,17 @@ int main() {
 	// music.play();
 
 	sf::TcpSocket server;
-	sf::Socket::Status status = server.connect("127.0.1.1", 8022);
+	sf::Socket::Status status = server.connect("127.0.0.1", 9002);
 
 	if (status != sf::Socket::Done) {
 		window.close();
 		return -1;
 	}
 
-	Textures[T1].Exists = true;
-	Textures[T2].Exists = true;
-	Textures[S1].Exists = false;
-	Textures[S2].Exists = false;
+	Tanks[0].Exists = true;
+	Tanks[1].Exists = true;
+	Shells[0].Exists = false;
+	Shells[1].Exists = false;
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -122,42 +136,59 @@ int main() {
 		if ((id >= 0) && (id < 4)) {
 			Tank1.side = id;
 		}
+
 		packet.clear();
 		packet << id;
 		server.send(packet);
+
 		server.receive(packet);
-		packet >> Textures[T1].x1 >> Textures[T1].y1 >> Textures[T1].side >> Textures[T1].hp
-			>> Textures[T2].x1 >> Textures[T2].y1 >> Textures[T2].side >> Textures[T2].hp
-			>> Textures[S1].Exists >>Textures[S1].x1 >> Textures[S1].y1 >> Textures[S1].side
-			>> Textures[S2].Exists >>Textures[S2].x1 >> Textures[S2].y1 >> Textures[S2].side;
+		for (int i = 0; i < Tanks.size(); i++) {
+			packet >> Tanks[i].x1 >> Tanks[i].y1 >> Tanks[i].side >> Tanks[i].hp;
+		}
+		for (int i = 0; i < Shells.size(); i++) {
+			packet >> Shells[i].x1 >> Shells[i].y1 >> Shells[i].side >> Shells[i].Exists;
+		}
+		for (int i = 0; i < 2 * Tanks.size(); i++) {
+			int x = 0;
+			int y = 0;
+			packet >> x >> y;
+			if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
+				map[x][y] = -1;
+			}
+		}
 		packet.clear();
 
-		/*window.clear();
-		for (int j = 0; j < Textures.size(); j++) {
-			if (Textures[j].Exists) {
-				int dx = (Textures[j].x1 - Textures[j].x + biasX) / 2;
-				int dy = (Textures[j].y1 - Textures[j].y) / 2;
-				Textures[j].move(dx, dy);
-			}
+		for (int i = 0; i < Tanks.size(); i++) {
+			Tanks[i].setPossition(Tanks[i].x1, Tanks[i].y1);
 		}
-		for (int i = 0; i < Textures.size(); i++) {
-			if (Textures[i].Exists) {
-				Textures[i].draw(window);
-			}
-		}
-		window.display();
-		sf::sleep(sf::milliseconds(15));*/
-
-		for (int i = 0; i < Textures.size(); i++) {
-			Textures[i].setPossition(Textures[i].x1, Textures[i].y1);
+		for (int i = 0; i < Tanks.size(); i++) {
+			Shells[i].setPossition(Shells[i].x1, Shells[i].y1);
 		}
 		window.clear();
 		Game_Board.draw(window);
-		for (int i = 0; i < Textures.size(); i++) {
-			if (Textures[i].Exists) {
-				Textures[i].draw(window);
+		for (int i = 0; i < Tanks.size(); i++) {
+			Tanks[i].draw(window);
+		}
+		for (int i = 0; i < Shells.size(); i++) {
+			if (Shells[i].Exists) {
+				if ((Shells[i].side == 1) || (Shells[i].side == 3)) {
+					Shells[i].draw(window, Shells[i].x1, Shells[i].y1 + 20);
+				} else {
+					Shells[i].draw(window, Shells[i].x1 - 5, Shells[i].y1);
+				}
 			}
 		}
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				switch (map[i][j]) {
+					case 1:
+						Ner_Blok.draw(window, i * 25 + 148, j * 25);
+						break;
+				};
+			}
+		}
+
 		window.display();
 		sf::sleep(sf::milliseconds(15));
 	}

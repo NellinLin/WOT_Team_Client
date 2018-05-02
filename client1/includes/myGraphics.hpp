@@ -4,10 +4,12 @@
 #include <iostream>
 #include <string.h>
 #include <math.h>
-#define biasX 148
 
 class ActiveTexture {
 	public:
+		int biasX;
+		int biasY;
+
 		int x;
 		int y;
 
@@ -23,6 +25,8 @@ class ActiveTexture {
 		sf::Sprite Obj_Sprite[4];
 
 		ActiveTexture(std::string filepath[4]) {
+			biasX = 123;
+			biasY = -25;
 			for (int i = 0; i < 4; i++) {
 				if (!Obj_Image[i].loadFromFile(filepath[i])) {
 					return;
@@ -51,9 +55,9 @@ class ActiveTexture {
 
 		void setPossition(int posX, int posY) {
 			x = posX - biasX;
-			y = posY;
+			y = posY - biasY;
 			for (int i = 0; i < 4; i++) {
-				Obj_Sprite[i].setPosition(posX + biasX, posY);
+				Obj_Sprite[i].setPosition(posX + biasX, posY + biasY);
 			}
 		}
 
@@ -61,7 +65,7 @@ class ActiveTexture {
 			if ((id < 4) && (id >= 0)) {
 				setPossition(posX, posY);
 				x = posX - biasX;
-				y = posY;
+				y = posY - biasY;
 				window.draw(Obj_Sprite[id]);
 				side = id;
 			}
@@ -71,7 +75,7 @@ class ActiveTexture {
 			if ((side < 4) && (side >= 0)) {
 				setPossition(posX, posY);
 				x = posX - biasX;
-				y = posY;
+				y = posY - biasY;
 				window.draw(Obj_Sprite[side]);
 			}
 		}
@@ -158,8 +162,6 @@ int key_id() {
 	}
 	return -1;
 }
-
-
 
 
 
