@@ -51,6 +51,8 @@ class Tank {
 			shell.cellY1 = -1;
 			shell.cellX2 = -1;
 			shell.cellY2 = -1;
+			shell.x = 0;
+			shell.y = 0;
 			x = 0;
 			y = 0;
 			side = 0;

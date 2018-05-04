@@ -61,15 +61,16 @@ int main() {
 			map[i][j] = -1;
 		}
 	}
-	map[16][15] = 1;
-	map[15][15] = 1;
+	for (int i = 5; i < cols-5, i++) {
+		map[15][i] = 1;
+	}
 
 	sf::RenderWindow window(sf::VideoMode(952, 650), "tan4iki");
 
 	window.clear();
 	Interf_1.draw(window);
 	window.display();
-	sf::sleep(sf::seconds(1));
+	sf::sleep(sf::seconds(1.0));
 	int id = 0;
 
 	while (window.isOpen() && !id) {

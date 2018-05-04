@@ -61,8 +61,9 @@ int main() {
 			map[i][j] = -1;
 		}
 	}
-	map[16][15] = 1;
-	map[15][15] = 1;
+	for (int i = 5; i < cols - 5; i++) {
+		map[15][i] = 1;
+	}
 
 	sf::RenderWindow window(sf::VideoMode(952, 650), "tan4iki");
 

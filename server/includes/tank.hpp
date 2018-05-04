@@ -56,7 +56,7 @@ class Tank {
 			x = 0;
 			y = 0;
 			side = 0;
-			hp = 2;
+			hp = 3;
 			shell.Exists = false;
 		}
 

@@ -25,8 +25,9 @@ int main() {
 			map[i][j] = -1;
 		}
 	}
-	map[16][15] = 1;
-	map[15][15] = 1;
+	for (int i = 5; i < cols - 5; i++) {
+		map[15][i] = 1;
+	}
 
 	sf::Time fps = sf::milliseconds(31);
 
@@ -42,13 +43,6 @@ int main() {
 	}
 
 	sf::Packet packet;
-
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++) {
-			std::cout << map[i][j];
-		}
-		std::cout << std::endl;
-	}
 
 	int game_stopped = 0;
 
