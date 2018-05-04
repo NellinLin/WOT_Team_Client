@@ -8,8 +8,8 @@
 
 #include "includes/myGraphics.hpp"
 
-#define biasX 123
-#define biasY -25
+#define rows 26
+#define cols 26
 
 int main() {
 	StaticTexture Game_Board("pvp_draw/Game_Board.png");
@@ -47,7 +47,22 @@ int main() {
 	std::vector<ActiveTexture> Shells;
 	Shells.push_back(Shell1);
 	Shells.push_back(Shell2);
+	for (int i = 0; i < Shells.size(); i++) {
+		Shells[i].biasX += 25;
+	}
 
+	int** map;
+	map = (int**)malloc(rows * sizeof(int*));
+	for (int i = 0; i < rows; i++) {
+		map[i] = (int*)malloc(cols * sizeof(int));
+	}
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			map[i][j] = -1;
+		}
+	}
+	map[16][15] = 1;
+	map[15][15] = 1;
 
 	sf::RenderWindow window(sf::VideoMode(952, 650), "tan4iki");
 
@@ -93,7 +108,7 @@ int main() {
 	// music.play();
 
 	sf::TcpSocket server;
-	sf::Socket::Status status = server.connect("127.0.1.1", 9001);
+	sf::Socket::Status status = server.connect("127.0.0.1", 9003);
 
 	if (status != sf::Socket::Done) {
 		window.close();
@@ -104,6 +119,7 @@ int main() {
 	Tanks[1].Exists = true;
 	Shells[0].Exists = false;
 	Shells[1].Exists = false;
+	int game_stopped = 0;
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -111,6 +127,7 @@ int main() {
 		window.pollEvent(event);
 		if (event.type == sf::Event::Closed) {
 			id = 100;
+			packet.clear();
 			packet << id;
 			server.send(packet);
 			server.disconnect();
@@ -121,15 +138,32 @@ int main() {
 		if ((id >= 0) && (id < 4)) {
 			Tank1.side = id;
 		}
+
 		packet.clear();
 		packet << id;
 		server.send(packet);
+		packet.clear();
+
 		server.receive(packet);
+		packet >> game_stopped;
+		if (game_stopped) {
+			window.close();
+			server.disconnect();
+			return 0;
+		}
 		for (int i = 0; i < Tanks.size(); i++) {
 			packet >> Tanks[i].x1 >> Tanks[i].y1 >> Tanks[i].side >> Tanks[i].hp;
 		}
 		for (int i = 0; i < Shells.size(); i++) {
 			packet >> Shells[i].x1 >> Shells[i].y1 >> Shells[i].side >> Shells[i].Exists;
+		}
+		for (int i = 0; i < 2 * Tanks.size(); i++) {
+			int x = 0;
+			int y = 0;
+			packet >> x >> y;
+			if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
+				map[x][y] = -1;
+			}
 		}
 		packet.clear();
 
@@ -146,10 +180,24 @@ int main() {
 		}
 		for (int i = 0; i < Shells.size(); i++) {
 			if (Shells[i].Exists) {
-				Shells[i].draw(window);
-				std::cout << "yeea" << std::endl;
+				if ((Shells[i].side == 1) || (Shells[i].side == 3)) {
+					Shells[i].draw(window, Shells[i].x1, Shells[i].y1 + 20);
+				} else if ((Shells[i].side == 0) || (Shells[i].side == 2)) {
+					Shells[i].draw(window, Shells[i].x1 - 5, Shells[i].y1 + 10);
+				}
 			}
 		}
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				switch (map[i][j]) {
+					case 1:
+						Ner_Blok.draw(window, i * 25 + 148, j * 25);
+						break;
+				};
+			}
+		}
+
 		window.display();
 		sf::sleep(sf::milliseconds(15));
 	}

@@ -61,7 +61,7 @@ int main() {
 			map[i][j] = -1;
 		}
 	}
-	map[25][25] = 1;
+	map[16][15] = 1;
 	map[15][15] = 1;
 
 	sf::RenderWindow window(sf::VideoMode(952, 650), "tan4iki");
@@ -69,7 +69,7 @@ int main() {
 	window.clear();
 	Interf_1.draw(window);
 	window.display();
-	sf::sleep(sf::seconds(1.5));
+	sf::sleep(sf::seconds(1.0));
 	int id = 0;
 
 	while (window.isOpen() && !id) {
@@ -108,7 +108,7 @@ int main() {
 	// music.play();
 
 	sf::TcpSocket server;
-	sf::Socket::Status status = server.connect("127.0.0.1", 9002);
+	sf::Socket::Status status = server.connect("127.0.0.1", 9003);
 
 	if (status != sf::Socket::Done) {
 		window.close();
@@ -119,6 +119,7 @@ int main() {
 	Tanks[1].Exists = true;
 	Shells[0].Exists = false;
 	Shells[1].Exists = false;
+	int game_stopped = 0;
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -126,6 +127,7 @@ int main() {
 		window.pollEvent(event);
 		if (event.type == sf::Event::Closed) {
 			id = 100;
+			packet.clear();
 			packet << id;
 			server.send(packet);
 			server.disconnect();
@@ -140,8 +142,15 @@ int main() {
 		packet.clear();
 		packet << id;
 		server.send(packet);
-
+		packet.clear();
 		server.receive(packet);
+
+		packet >> game_stopped;
+		if (game_stopped == 1) {
+			window.close();
+			server.disconnect();
+			return 0;
+		}
 		for (int i = 0; i < Tanks.size(); i++) {
 			packet >> Tanks[i].x1 >> Tanks[i].y1 >> Tanks[i].side >> Tanks[i].hp;
 		}
@@ -173,8 +182,8 @@ int main() {
 			if (Shells[i].Exists) {
 				if ((Shells[i].side == 1) || (Shells[i].side == 3)) {
 					Shells[i].draw(window, Shells[i].x1, Shells[i].y1 + 20);
-				} else {
-					Shells[i].draw(window, Shells[i].x1 - 5, Shells[i].y1);
+				} else if ((Shells[i].side == 0) || (Shells[i].side == 2)) {
+					Shells[i].draw(window, Shells[i].x1 - 5, Shells[i].y1 + 10);
 				}
 			}
 		}

@@ -10,7 +10,7 @@ int main() {
 	int n = 2;
 	std::vector<Tank> Tanks(n);
 
-	Tanks[0].setPossition(0, 0);
+	Tanks[0].setPossition(25, 25);
 	Tanks[1].setPossition(200, 200);
 
 	sf::TcpSocket clients[n];
@@ -25,13 +25,13 @@ int main() {
 			map[i][j] = -1;
 		}
 	}
-	map[25][25] = 1;
+	map[16][15] = 1;
 	map[15][15] = 1;
 
 	sf::Time fps = sf::milliseconds(31);
 
 	sf::TcpListener listener;
-	if (listener.listen(9002) != sf::Socket::Done) {
+	if (listener.listen(9003) != sf::Socket::Done) {
 		return -2;
 	}
 
@@ -50,6 +50,8 @@ int main() {
 		std::cout << std::endl;
 	}
 
+	int game_stopped = 0;
+
 	while (true) {
 		for (int i = 0; i < n; i++) {
 			packet.clear();
@@ -65,7 +67,28 @@ int main() {
 
 		move_all(Tanks, map);
 
+		int count_of_alive = 0;
+		for (int i = 0; i < Tanks.size(); i++) {
+			if (Tanks[i]. hp > 0) {
+				count_of_alive++;
+			}
+		}
 		packet.clear();
+		if (count_of_alive <= 1) {
+			game_stopped = 1;
+			packet << game_stopped;
+			for (int j = 0; j < 5; j++) {
+				for (int i = 0; i < n; i++) {
+					clients[i].send(packet);
+				}
+				sf::sleep(fps);
+			}
+			std::cout << game_stopped << std::endl;
+			return 0;
+		}
+		game_stopped = 0;
+		packet << game_stopped;
+
 		for (int i = 0; i < Tanks.size(); i++) {
 			packet << Tanks[i].x << Tanks[i].y << Tanks[i].side << Tanks[i].hp;
 		}
