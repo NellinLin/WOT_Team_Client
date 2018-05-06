@@ -25,10 +25,8 @@ class Shell {
 		int side;
 		bool Exists;
 
-		int cellX1;
-		int cellY1;
-		int cellX2;
-		int cellY2;
+		int cellX[2];
+		int cellY[2];
 
 		Shell() {
 		}
@@ -47,24 +45,24 @@ class Tank {
 		Shell shell;
 
 		Tank() {
-			shell.cellX1 = -1;
-			shell.cellY1 = -1;
-			shell.cellX2 = -1;
-			shell.cellY2 = -1;
+			shell.cellX[0] = -1;
+			shell.cellX[1] = -1;
+			shell.cellY[0] = -1;
+			shell.cellY[1] = -1;
 			shell.x = 0;
 			shell.y = 0;
 			x = 0;
 			y = 0;
 			side = 0;
-			hp = 2;
+			hp = 3;
 			shell.Exists = false;
 		}
 
 		Tank(int posX, int posY) {
-			shell.cellX1 = -1;
-			shell.cellY1 = -1;
-			shell.cellX2 = -1;
-			shell.cellY2 = -1;
+			shell.cellX[0] = -1;
+			shell.cellX[1] = -1;
+			shell.cellY[0] = -1;
+			shell.cellY[1] = -1;
 			shell.x = 0;
 			shell.y = 0;
 			x = posX;
@@ -238,76 +236,72 @@ bool is_in_touch(Shell& shell, int** map) {
 		case 0:
 			x = x / 26;
 			y = y / 26;
-			if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
-					if (map[x][y] > 0) {
+			for (int j = 0; j < 2; j++) {
+				if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
+					if ((map[x][y] == destruct) || (map[x][y] == non_destuct)) {
 						shell.Exists = false;
-						shell.cellX1 = x;
-						shell.cellY1 = y;
+						if (map[x][y] == destruct) {
+							map[x][y] = -1;
+							shell.cellX[j] = x;
+							shell.cellY[j] = y;
+						}
 					}
-			}
-			if ((x + 1 >= 0) && (x + 1 < cols) && (y >= 0) && (y < rows)) {
-				if ((map[x + 1][y] > 0) || (map[x + 1][y] > 0)) {
-					shell.Exists = false;
-					shell.cellX2 = x + 1;
-					shell.cellY2 = y;
 				}
+				x++;
 			}
 			return true;
 			break;
 		case 1:
 			x = x / 26;
 			y = y / 26;
-			if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
-					if (map[x][y] > 0) {
+			for (int j = 0; j < 2; j++) {
+				if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
+					if ((map[x][y] == destruct) || (map[x][y] == non_destuct)) {
 						shell.Exists = false;
-						shell.cellX1 = x;
-						shell.cellY1 = y;
+						if (map[x][y] == destruct) {
+							map[x][y] = -1;
+							shell.cellX[j] = x;
+							shell.cellY[j] = y;
+						}
 					}
-			}
-			if ((x >= 0) && (x < cols) && (y + 1 >= 0) && (y + 1 < rows)) {
-				if ((map[x][y + 1] > 0) || (map[x][y + 1] > 0)) {
-					shell.Exists = false;
-					shell.cellX2 = x;
-					shell.cellY2 = y + 1;
 				}
+				y++;
 			}
 			return true;
 			break;
 		case 2:
 			x = x / 26;
 			y = y / 26;
-			if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
-					if (map[x][y] > 0) {
+			for (int j = 0; j < 2; j++) {
+				if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
+					if ((map[x][y] == destruct) || (map[x][y] == non_destuct)) {
 						shell.Exists = false;
-						shell.cellX1 = x;
-						shell.cellY1 = y;
+						if (map[x][y] == destruct) {
+							map[x][y] = -1;
+							shell.cellX[j] = x;
+							shell.cellY[j] = y;
+						}
 					}
-			}
-			if ((x + 1 >= 0) && (x + 1 < cols) && (y >= 0) && (y < rows)) {
-				if ((map[x + 1][y] > 0) || (map[x + 1][y] > 0)) {
-					shell.Exists = false;
-					shell.cellX2 = x + 1;
-					shell.cellY2 = y;
 				}
+				x++;
 			}
 			return true;
 			break;
 		case 3:
-			x = x / 26;
+			x = x / 26 + 1;
 			y = y / 26;
-			if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
-					if (map[x][y] > 0) {
+			for (int j = 0; j < 2; j++) {
+				if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
+					if ((map[x][y] == destruct) || (map[x][y] == non_destuct)) {
 						shell.Exists = false;
-						shell.cellX2 = x;
-						shell.cellY2 = y;
+						if (map[x][y] == destruct) {
+							map[x][y] = -1;
+							shell.cellX[j] = x;
+							shell.cellY[j] = y;
+						}
 					}
-			}
-			if ((x >= 0) && (x < cols) && (y + 1 >= 0) && (y + 1 < rows)) {
-				if ((map[x][y + 1] > 0) || (map[x][y + 1] > 0)) {
-					shell.Exists = false;
-					shell.cellX2 = x;
-					shell.cellY2 = y + 1;
 				}
+				y++;
 			}
 			return true;
 	};

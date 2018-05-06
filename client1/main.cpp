@@ -56,6 +56,7 @@ int main() {
 	for (int i = 0; i < rows; i++) {
 		map[i] = (int*)malloc(cols * sizeof(int));
 	}
+
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
 			map[i][j] = -1;
@@ -63,6 +64,18 @@ int main() {
 	}
 	for (int i = 5; i < cols - 5; i++) {
 		map[15][i] = 1;
+	}
+	for (int i = 5; i < cols - 5; i++) {
+		map[16][i] = 1;
+	}
+	for (int i = 5; i < cols - 5; i++) {
+		map[17][i] = 1;
+	}
+	for (int i = 5; i < cols - 5; i++) {
+		map[20][i] = 2;
+	}
+	for (int i = 5; i < cols - 5; i++) {
+		map[10][i] = 3;
 	}
 
 	sf::RenderWindow window(sf::VideoMode(952, 650), "tan4iki");
@@ -194,6 +207,12 @@ int main() {
 				switch (map[i][j]) {
 					case 1:
 						Ner_Blok.draw(window, i * 25 + 148, j * 25);
+						break;
+					case 2:
+						Nerush_Blok.draw(window, i * 25 + 148, j * 25);
+						break;
+					case 3:
+						Klaksa.draw(window, i * 25 + 148, j * 25);
 						break;
 				};
 			}
