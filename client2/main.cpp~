@@ -61,7 +61,7 @@ int main() {
 			map[i][j] = -1;
 		}
 	}
-	for (int i = 5; i < cols - 5, i++) {
+	for (int i = 5; i < cols - 5; i++) {
 		map[15][i] = 1;
 	}
 

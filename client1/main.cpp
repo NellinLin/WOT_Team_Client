@@ -122,7 +122,7 @@ int main() {
 	// music.play();
 
 	sf::TcpSocket server;
-	sf::Socket::Status status = server.connect("127.0.0.1", 9003);
+	sf::Socket::Status status = server.connect("127.0.0.1", 9004);
 
 	if (status != sf::Socket::Done) {
 		window.close();
@@ -194,10 +194,14 @@ int main() {
 		}
 		for (int i = 0; i < Shells.size(); i++) {
 			if (Shells[i].Exists) {
-				if ((Shells[i].side == 1) || (Shells[i].side == 3)) {
+				if (Shells[i].side == 1) {
+					Shells[i].draw(window, Shells[i].x1 - 10, Shells[i].y1 + 20);
+				} else if (Shells[i].side == 3) {
 					Shells[i].draw(window, Shells[i].x1, Shells[i].y1 + 20);
-				} else if ((Shells[i].side == 0) || (Shells[i].side == 2)) {
-					Shells[i].draw(window, Shells[i].x1 - 5, Shells[i].y1 + 10);
+				} else if (Shells[i].side == 0) {
+					Shells[i].draw(window, Shells[i].x1 - 5, Shells[i].y1 + 25);
+				} else if (Shells[i].side == 2) {
+					Shells[i].draw(window, Shells[i].x1 - 5, Shells[i].y1 + 15);
 				}
 			}
 		}

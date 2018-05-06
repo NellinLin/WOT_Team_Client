@@ -44,7 +44,7 @@ int main() {
 	sf::Time fps = sf::milliseconds(31);
 
 	sf::TcpListener listener;
-	if (listener.listen(9003) != sf::Socket::Done) {
+	if (listener.listen(9004) != sf::Socket::Done) {
 		return -2;
 	}
 

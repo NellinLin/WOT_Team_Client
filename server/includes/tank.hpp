@@ -10,14 +10,6 @@
 #define rows 26
 #define cols 26
 
-/*
-
-
-	Поставить координаты танка в центр, а не в левый верхний угл :     DONE
-
-
-*/
-
 class Shell {
 	public:
 		int x;
@@ -101,12 +93,6 @@ class Tank {
 		}
 
 		void move() {
-			if (id != side) {
-				align();
-				if ((id < 4) && (id >= 0)) {
-					side = id;
-				}
-			}
 			switch (id) {
 				case 0:
 					y -= Tank_Velocity;
@@ -182,11 +168,14 @@ bool will_be_in_touch(Tank& tank, int** map) {
 		case 0:
 			y -= Tank_Velocity;
 			x = x / 26;
-			y = y / 26;
-			if ((x >= 0) && (x + 1 < cols) && (y >= 0) && (y < rows)) {
-				if ((map[x][y] > 0) || (map[x + 1][y] > 0)) {
-					return true;
+			y = y / 26 + 1;
+			for (int i = 0; i < 2; i++) {
+				if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
+					if ((map[x][y] > 0) || (map[x][y] > 0)) {
+						return true;
+					}
 				}
+				x++;
 			}
 			return false;
 			break;
@@ -194,10 +183,13 @@ bool will_be_in_touch(Tank& tank, int** map) {
 			x += Tank_Velocity;
 			x = x / 26 + 1;
 			y = y / 26;
-			if ((x >= 0) && (x < cols) && (y >= 0) && (y + 1 < rows)) {
-				if ((map[x][y] > 0) || (map[x][y + 1] > 0)) {
-					return true;
+			for (int i = 0; i < 2; i++) {
+				if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
+					if ((map[x][y] > 0) || (map[x][y] > 0)) {
+						return true;
+					}
 				}
+				y++;
 			}
 			return false;
 			break;
@@ -205,10 +197,13 @@ bool will_be_in_touch(Tank& tank, int** map) {
 			y += Tank_Velocity;
 			x = x / 26;
 			y = y / 26 + 1;
-			if ((x >= 0) && (x + 1 < cols) && (y >= 0) && (y < rows)) {
-				if ((map[x][y] > 0) || (map[x + 1][y] > 0)) {
-					return true;
+			for (int i = 0; i < 2; i++) {
+				if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
+					if ((map[x][y] > 0) || (map[x][y] > 0)) {
+						return true;
+					}
 				}
+				x++;
 			}
 			return false;
 			break;
@@ -216,10 +211,13 @@ bool will_be_in_touch(Tank& tank, int** map) {
 			x -= Tank_Velocity;
 			x = x / 26;
 			y = y / 26;
-			if ((x >= 0) && (x < cols) && (y >= 0) && (y + 1 < rows)) {
-				if ((map[x][y] > 0) || (map[x][y + 1] > 0)) {
-					return true;
+			for (int i = 0; i < 2; i++) {
+				if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
+					if ((map[x][y] > 0) || (map[x][y] > 0)) {
+						return true;
+					}
 				}
+				y++;
 			}
 			return false;
 	};
@@ -399,6 +397,16 @@ void move_shells(std::vector<Tank>& Tanks) {
 }
 
 void move_all(std::vector<Tank>& Tanks, int** map) {
+	for (int i = 0; i < Tanks.size(); i++) {
+		if ((Tanks[i].id < 4) && (Tanks[i].id >= 0)) {
+			if (Tanks[i].side != Tanks[i].id) {
+				Tanks[i].align();
+				Tanks[i].side = Tanks[i].id;
+			}
+		} else {
+			Tanks[i].align();
+		}
+	}
 	move_tanks(Tanks, map);
 	move_shells(Tanks);
 	for (int i = 0; i < Tanks.size(); i++) {
