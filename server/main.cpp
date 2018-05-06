@@ -7,6 +7,7 @@
 const int n = 2;
 
 int main() {
+	Cup cup;
 	int n = 2;
 	std::vector<Tank> Tanks(n);
 
@@ -71,7 +72,7 @@ int main() {
 			}
 		}
 
-		move_all(Tanks, map);
+		move_all(Tanks, cup, map);
 
 		int count_of_alive = 0;
 		for (int i = 0; i < Tanks.size(); i++) {
@@ -111,8 +112,13 @@ int main() {
 				}
 			}
 		}
-
+		packet << cup.x << cup.y << cup.hp;
 		for (int i = 0; i < n; i++) {
+			if (cup.how_bit_me == i) {
+				packet << true;
+			} else {
+				packet << false;
+			}
 			clients[i].send(packet);
 		}
 		packet.clear();

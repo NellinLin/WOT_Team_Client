@@ -18,6 +18,7 @@ int main() {
 	StaticTexture Ner_Blok("pvp_draw/Ner_blok.png");
 	StaticTexture Nerush_Blok("pvp_draw/Nerush_blok.png");
 	StaticTexture Strelka("pvp_draw/Strelka.png");
+	StaticTexture Cup("pvp_draw/Cup.png");
 
 	StaticTexture exit("interface/exit.png");
 	StaticTexture Interf_1("interface/Interf_1.png");
@@ -221,7 +222,7 @@ int main() {
 				};
 			}
 		}
-
+		Cup.draw(window, 148, 25 * 12);
 		window.display();
 		sf::sleep(sf::milliseconds(15));
 	}
