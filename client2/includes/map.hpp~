@@ -7,10 +7,9 @@
 
 int** Read_from_file(const char *f) {
 	std::fstream file(f);
-	if (!file.is_open()) {
+	if (!file.is_open())
 		return ERR_F;
-	}
-	int** map;
+	int ** map;
 	map = new int*[rows];
 	for (int i = 0; i < rows; i++) {
 		map[i] = new int[cols];
@@ -19,6 +18,7 @@ int** Read_from_file(const char *f) {
 		for (int j = 0; j < cols; j++)
 			map[i][j] = 0;
 	}
+
 	int buf1, buf2, buf3;
 	while (!file.eof()) {
 		file >> buf1 >> buf2 >> buf3;

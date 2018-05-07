@@ -7,6 +7,7 @@
 #include <math.h>
 
 #include "includes/myGraphics.hpp"
+#include "includes/map.hpp"
 
 #define rows 26
 #define cols 26
@@ -53,30 +54,9 @@ int main() {
 	}
 
 	int** map;
-	map = (int**)malloc(rows * sizeof(int*));
-	for (int i = 0; i < rows; i++) {
-		map[i] = (int*)malloc(cols * sizeof(int));
-	}
-
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++) {
-			map[i][j] = -1;
-		}
-	}
-	for (int i = 5; i < cols - 5; i++) {
-		map[15][i] = 1;
-	}
-	for (int i = 5; i < cols - 5; i++) {
-		map[16][i] = 1;
-	}
-	for (int i = 5; i < cols - 5; i++) {
-		map[17][i] = 1;
-	}
-	for (int i = 5; i < cols - 5; i++) {
-		map[20][i] = 2;
-	}
-	for (int i = 5; i < cols - 5; i++) {
-		map[10][i] = 3;
+	map = Read_from_file("maps/map1.txt");
+	if (map == NULL) {
+		return -1;
 	}
 
 	sf::RenderWindow window(sf::VideoMode(952, 650), "tan4iki");
@@ -123,7 +103,7 @@ int main() {
 	// music.play();
 
 	sf::TcpSocket server;
-	sf::Socket::Status status = server.connect("127.0.0.1", 9004);
+	sf::Socket::Status status = server.connect("127.0.0.1", 9007);
 
 	if (status != sf::Socket::Done) {
 		window.close();
@@ -134,7 +114,7 @@ int main() {
 	Tanks[1].Exists = true;
 	Shells[0].Exists = false;
 	Shells[1].Exists = false;
-	int game_stopped = 0;
+	int The_End = 0;
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -150,9 +130,6 @@ int main() {
 			return 0;
 		}
 		int id = key_id();
-		if ((id >= 0) && (id < 4)) {
-			Tank1.side = id;
-		}
 
 		packet.clear();
 		packet << id;
@@ -160,11 +137,11 @@ int main() {
 		packet.clear();
 		server.receive(packet);
 
-		packet >> game_stopped;
-		if (game_stopped == 1) {
+		packet >> The_End;
+		if (The_End >= 0) {
 			window.close();
 			server.disconnect();
-			return 0;
+			break;
 		}
 		for (int i = 0; i < Tanks.size(); i++) {
 			packet >> Tanks[i].x1 >> Tanks[i].y1 >> Tanks[i].side >> Tanks[i].hp;
@@ -188,6 +165,7 @@ int main() {
 		for (int i = 0; i < Tanks.size(); i++) {
 			Shells[i].setPossition(Shells[i].x1, Shells[i].y1);
 		}
+
 		window.clear();
 		Game_Board.draw(window);
 		for (int i = 0; i < Tanks.size(); i++) {
@@ -226,6 +204,7 @@ int main() {
 		window.display();
 		sf::sleep(sf::milliseconds(15));
 	}
-
+	// TODO: Обработку победителя: 1 - я; 0 - не я; 2 - никто не победил/кто-то отрубился
+	std::cout << The_End << std::endl;
 	return 0;
 }

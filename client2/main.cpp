@@ -7,6 +7,7 @@
 #include <math.h>
 
 #include "includes/myGraphics.hpp"
+#include "includes/map.hpp"
 
 #define rows 26
 #define cols 26
@@ -18,6 +19,7 @@ int main() {
 	StaticTexture Ner_Blok("pvp_draw/Ner_blok.png");
 	StaticTexture Nerush_Blok("pvp_draw/Nerush_blok.png");
 	StaticTexture Strelka("pvp_draw/Strelka.png");
+	StaticTexture Cup("pvp_draw/Cup.png");
 
 	StaticTexture exit("interface/exit.png");
 	StaticTexture Interf_1("interface/Interf_1.png");
@@ -52,17 +54,9 @@ int main() {
 	}
 
 	int** map;
-	map = (int**)malloc(rows * sizeof(int*));
-	for (int i = 0; i < rows; i++) {
-		map[i] = (int*)malloc(cols * sizeof(int));
-	}
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++) {
-			map[i][j] = -1;
-		}
-	}
-	for (int i = 5; i < cols - 5; i++) {
-		map[15][i] = 1;
+	map = Read_from_file("maps/map1.txt");
+	if (map == NULL) {
+		return -1;
 	}
 
 	sf::RenderWindow window(sf::VideoMode(952, 650), "tan4iki");
@@ -70,7 +64,7 @@ int main() {
 	window.clear();
 	Interf_1.draw(window);
 	window.display();
-	sf::sleep(sf::seconds(1.5));
+	sf::sleep(sf::seconds(1.0));
 	int id = 0;
 
 	while (window.isOpen() && !id) {
@@ -109,7 +103,7 @@ int main() {
 	// music.play();
 
 	sf::TcpSocket server;
-	sf::Socket::Status status = server.connect("127.0.0.1", 9004);
+	sf::Socket::Status status = server.connect("127.0.0.1", 9007);
 
 	if (status != sf::Socket::Done) {
 		window.close();
@@ -120,7 +114,7 @@ int main() {
 	Tanks[1].Exists = true;
 	Shells[0].Exists = false;
 	Shells[1].Exists = false;
-	int game_stopped = 0;
+	int The_End = 0;
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -145,12 +139,12 @@ int main() {
 		server.send(packet);
 		packet.clear();
 		server.receive(packet);
-		packet >> game_stopped;
 
-		if (game_stopped) {
+		packet >> The_End;
+		if (The_End >= 0) {
 			window.close();
 			server.disconnect();
-			return 0;
+			break;
 		}
 		for (int i = 0; i < Tanks.size(); i++) {
 			packet >> Tanks[i].x1 >> Tanks[i].y1 >> Tanks[i].side >> Tanks[i].hp;
@@ -181,10 +175,14 @@ int main() {
 		}
 		for (int i = 0; i < Shells.size(); i++) {
 			if (Shells[i].Exists) {
-				if ((Shells[i].side == 1) || (Shells[i].side == 3)) {
+				if (Shells[i].side == 1) {
+					Shells[i].draw(window, Shells[i].x1 - 10, Shells[i].y1 + 20);
+				} else if (Shells[i].side == 3) {
 					Shells[i].draw(window, Shells[i].x1, Shells[i].y1 + 20);
-				} else if ((Shells[i].side == 0) || (Shells[i].side == 2)) {
-					Shells[i].draw(window, Shells[i].x1 - 5, Shells[i].y1 + 10);
+				} else if (Shells[i].side == 0) {
+					Shells[i].draw(window, Shells[i].x1 - 5, Shells[i].y1 + 25);
+				} else if (Shells[i].side == 2) {
+					Shells[i].draw(window, Shells[i].x1 - 5, Shells[i].y1 + 15);
 				}
 			}
 		}
@@ -195,13 +193,20 @@ int main() {
 					case 1:
 						Ner_Blok.draw(window, i * 25 + 148, j * 25);
 						break;
+					case 2:
+						Nerush_Blok.draw(window, i * 25 + 148, j * 25);
+						break;
+					case 3:
+						Klaksa.draw(window, i * 25 + 148, j * 25);
+						break;
 				};
 			}
 		}
-
+		Cup.draw(window, 148, 25 * 12);
 		window.display();
 		sf::sleep(sf::milliseconds(15));
 	}
-
+	// TODO: Обработку победителя: 1 - я; 0 - не я; 2 - никто не победил
+	std::cout << The_End << std::endl;
 	return 0;
 }

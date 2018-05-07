@@ -2,52 +2,32 @@
 #include <SFML/Network.hpp>
 #include <iostream>
 #include <vector>
+
 #include "includes/tank.hpp"
+#include "includes/map.hpp"
 
 const int n = 2;
 
 int main() {
 	Cup cup;
-	cup.x = 125;
-	cup.y = 25;
 	int n = 2;
 	std::vector<Tank> Tanks(n);
 
-	Tanks[0].setPossition(25, 25);
-	Tanks[1].setPossition(200, 200);
+	Tanks[0].setPossition(100, 25);
+	Tanks[1].setPossition(100, 625);
 
 	sf::TcpSocket clients[n];
 
 	int** map;
-	map = (int**)malloc(rows * sizeof(int*));
-	for (int i = 0; i < rows; i++) {
-		map[i] = (int*)malloc(cols * sizeof(int));
-	}
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++) {
-			map[i][j] = -1;
-		}
-	}
-	for (int i = 5; i < cols - 5; i++) {
-		map[15][i] = 1;
-	}
-	for (int i = 5; i < cols - 5; i++) {
-		map[16][i] = 1;
-	}
-	for (int i = 5; i < cols - 5; i++) {
-		map[17][i] = 1;
-	}
-	for (int i = 5; i < cols - 5; i++) {
-		map[20][i] = 2;
-	}
-	for (int i = 5; i < cols - 5; i++) {
-		map[10][i] = 3;
+	map = Read_from_file("maps/map1.txt");
+	if (map == NULL) {
+		return -1;
 	}
 
 	sf::Time fps = sf::milliseconds(31);
 
 	sf::TcpListener listener;
-	if (listener.listen(9004) != sf::Socket::Done) {
+	if (listener.listen(9007) != sf::Socket::Done) {
 		return -2;
 	}
 
@@ -59,8 +39,6 @@ int main() {
 
 	sf::Packet packet;
 
-	int game_stopped = 0;
-
 	while (true) {
 		for (int i = 0; i < n; i++) {
 			packet.clear();
@@ -68,35 +46,48 @@ int main() {
 			packet >> Tanks[i].id;
 			if (Tanks[i].id == 100) {
 				for (int j = 0; j < n; j++) {
+					packet.clear();
+					packet << 2;
+					clients[j].send(packet);
 					clients[j].disconnect();
 				}
 				return 0;
 			}
 		}
 
-		move_all(Tanks, cup, map);
-
-		int count_of_alive = 0;
-		for (int i = 0; i < Tanks.size(); i++) {
-			if (Tanks[i]. hp > 0) {
-				count_of_alive++;
-			}
-		}
-		packet.clear();
-		if (count_of_alive <= 1) {
-			game_stopped = 1;
-			packet << game_stopped;
-			for (int j = 0; j < 5; j++) {
-				for (int i = 0; i < n; i++) {
+		int champion = move_all(Tanks, cup, map);
+		if (champion >= 0) {
+			if (champion < Tanks.size()) {
+				for (int i = 0; i < 3; i++) {
+					for (int j = 0; j < champion; j++) {
+						packet.clear();
+						packet << 0;
+						clients[j].send(packet);
+					}
+					packet.clear();
+					packet << 1;
+					clients[champion].send(packet);
+					for (int j = champion; j < Tanks.size(); j++) {
+						packet.clear();
+						packet << 0;
+						clients[j].send(packet);
+					}
+					sleep(fps);
+				}
+			} else {
+				for (int i = 0; i < Tanks.size(); i++) {
+					packet.clear();
+					packet << 4;
 					clients[i].send(packet);
 				}
-				sf::sleep(fps);
 			}
-			std::cout << game_stopped << std::endl;
+			for (int i = 0 ; i < Tanks.size(); i++) {
+				clients[i].disconnect();
+			}
 			return 0;
 		}
-		game_stopped = 0;
-		packet << game_stopped;
+		packet.clear();
+		packet << -1;
 
 		for (int i = 0; i < Tanks.size(); i++) {
 			packet << Tanks[i].x << Tanks[i].y << Tanks[i].side << Tanks[i].hp;
@@ -107,7 +98,7 @@ int main() {
 
 		for (int i = 0; i < Tanks.size(); i++) {
 			for (int j = 0; j < 2; j++) {
-				if ((Tanks[i].shell.cellX[j] > 0) && (Tanks[i].shell.cellX[j] < cols) && (Tanks[i].shell.cellY[j] > 0) && (Tanks[i].shell.cellY[j] < rows)) {
+				if ((Tanks[i].shell.cellX[j] >= 0) && (Tanks[i].shell.cellX[j] < cols) && (Tanks[i].shell.cellY[j] >= 0) && (Tanks[i].shell.cellY[j] < rows)) {
 					packet << Tanks[i].shell.cellX[j] << Tanks[i].shell.cellY[j];
 					Tanks[i].shell.cellX[j] = -1;
 					Tanks[i].shell.cellY[j] = -1;
@@ -116,11 +107,6 @@ int main() {
 		}
 		packet << cup.x << cup.y << cup.hp;
 		for (int i = 0; i < n; i++) {
-			if (cup.how_bit_me == i) {
-				packet << true;
-			} else {
-				packet << false;
-			}
 			clients[i].send(packet);
 		}
 		packet.clear();
