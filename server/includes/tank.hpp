@@ -96,16 +96,28 @@ class Tank {
 		}
 
 		void align() {
-			if ((x % 25) < 15) {
-				x = x - x % 25;
-			} else {
-				x = x - x % 25 + 25;
-			}
-			if ((y % 25) < 15) {
-				y = y - y % 25;
-			} else {
-				y = y - y % 25 + 25;
-			}
+			switch (side) {
+				case 0:
+					if (y % 25 < 2) {
+						y = y - y % 25;
+					} else {
+						y = y - y % 25 + 25;
+					}
+					break;
+				case 1:
+					x = x - x % 25;
+					break;
+				case 2:
+					y = y - y % 25;
+					break;
+				case 3:
+					if (x % 25 < 2) {
+						x = x - x % 25;
+					} else {
+						x = x - x % 25 + 25;
+					}
+					break;
+			};
 		}
 
 		void move() {
@@ -198,7 +210,7 @@ bool will_be_in_touch(Tank& tank, int** map) {
 		case 0:
 			y -= Tank_Velocity;
 			x = x / 26;
-			y = y / 26 + 1;
+			y = y / 26;
 			for (int i = 0; i < 2; i++) {
 				if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
 					if ((map[x][y] > 0) || (map[x][y] > 0)) {
@@ -211,7 +223,7 @@ bool will_be_in_touch(Tank& tank, int** map) {
 			break;
 		case 1:
 			x += Tank_Velocity;
-			x = x / 26;
+			x = x / 26 + 1;
 			y = y / 26;
 			for (int i = 0; i < 2; i++) {
 				if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
