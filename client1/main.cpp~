@@ -26,11 +26,11 @@ int main() {
 	StaticTexture Interf_2("interface/Interf_2.png");
 	StaticTexture Interf_3("interface/Interf_3.png");
 	StaticTexture Interf_4("interface/Interf_4.png");
+	StaticTexture Interf_5("interface/Interf_5.png");
+	StaticTexture Interf_6("interface/Interf_6.png");
 	StaticTexture Off_music("interface/Off.png");
 	StaticTexture On_music("interface/On.png");
 	StaticTexture Play("interface/Play.png");
-	StaticTexture Setting("interface/Settings.png");
-	StaticTexture top("interface/top.png");
 
 	std::string tank1[4] = {"pvp_draw/t011.png", "pvp_draw/t021.png", "pvp_draw/t031.png", "pvp_draw/t041.png"};
 	ActiveTexture Tank1(tank1);
@@ -77,8 +77,6 @@ int main() {
 		window.clear();
 		Interf_2.draw(window, 0, 0);
 		Play.draw(window, 70, 250);
-		Setting.draw(window, 70, 370);
-		top.draw(window, 70, 490);
 		exit.draw(window, 840, 20);
 
 		if (exit.isPressed(window)) {
@@ -159,6 +157,13 @@ int main() {
 		}
 		packet.clear();
 
+		for (int i = 0; i < Tanks.size(); i++) {
+			Tanks[i].setPossition(Tanks[i].x1, Tanks[i].y1);
+		}
+		for (int i = 0; i < Tanks.size(); i++) {
+			Shells[i].setPossition(Shells[i].x1, Shells[i].y1);
+		}
+
 		window.clear();
 		Game_Board.draw(window);
 		for (int i = 0; i < Tanks.size(); i++) {
@@ -199,5 +204,21 @@ int main() {
 	}
 	// TODO: Обработку победителя: 1 - я; 0 - не я; 2 - никто не победил/кто-то отрубился
 	std::cout << The_End << std::endl;
+	switch (The_End) {
+		case 0:
+			window.clear();
+			Interf_6.draw(window, 0, 0);
+			window.display();
+			sf::sleep(sf::seconds(2));
+			window.close();
+			break;
+		case 1:
+			window.clear();
+			Interf_5.draw(window, 0, 0);
+			sf::sleep(sf::seconds(2));
+			window.display();
+			window.close();
+			break;
+	};
 	return 0;
 }

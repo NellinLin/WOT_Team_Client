@@ -4,7 +4,7 @@
 #define Tank_Velocity 5
 #define Shell_Velocity 10
 #define destruct 1  // Рушимый блок
-#define non_destuct 2  // Нерушимый блок
+#define non_destruct 2  // Нерушимый блок
 #define blot 3  // Клякса
 
 #define rows 26
@@ -211,7 +211,7 @@ bool will_be_in_touch(Tank& tank, int** map) {
 			y = y / 26;
 			for (int i = 0; i < 2; i++) {
 				if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
-					if ((map[x][y] > 0) || (map[x][y] > 0)) {
+					if ((map[x][y] == destruct) || (map[x][y] == non_destruct)) {
 						return true;
 					}
 				}
@@ -225,7 +225,7 @@ bool will_be_in_touch(Tank& tank, int** map) {
 			y = y / 26;
 			for (int i = 0; i < 2; i++) {
 				if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
-					if ((map[x][y] > 0) || (map[x][y] > 0)) {
+					if ((map[x][y] == destruct) || (map[x][y] == non_destruct)) {
 						return true;
 					}
 				}
@@ -239,7 +239,7 @@ bool will_be_in_touch(Tank& tank, int** map) {
 			y = y / 26 + 1;
 			for (int i = 0; i < 2; i++) {
 				if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
-					if ((map[x][y] > 0) || (map[x][y] > 0)) {
+					if ((map[x][y] == destruct) || (map[x][y] == non_destruct)) {
 						return true;
 					}
 				}
@@ -253,7 +253,7 @@ bool will_be_in_touch(Tank& tank, int** map) {
 			y = y / 26;
 			for (int i = 0; i < 2; i++) {
 				if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
-					if ((map[x][y] > 0) || (map[x][y] > 0)) {
+					if ((map[x][y] == destruct) || (map[x][y] == non_destruct)) {
 						return true;
 					}
 				}
