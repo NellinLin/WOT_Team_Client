@@ -72,7 +72,7 @@ class Tank {
 			shell.x = 0;
 			shell.y = 0;
 			x = posX;
-			y = posY;	
+			y = posY;
 			side = 0;
 			hp = 2;
 			shell.Exists = false;
@@ -276,7 +276,7 @@ bool is_in_touch(Shell& shell, int** map) {
 			y = y / 26;
 			for (int j = 0; j < 2; j++) {
 				if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
-					if ((map[x][y] == destruct) || (map[x][y] == non_destuct)) {
+					if ((map[x][y] == destruct) || (map[x][y] == non_destruct)) {
 						shell.Exists = false;
 						if (map[x][y] == destruct) {
 							map[x][y] = -1;
@@ -294,7 +294,7 @@ bool is_in_touch(Shell& shell, int** map) {
 			y = y / 26;
 			for (int j = 0; j < 2; j++) {
 				if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
-					if ((map[x][y] == destruct) || (map[x][y] == non_destuct)) {
+					if ((map[x][y] == destruct) || (map[x][y] == non_destruct)) {
 						shell.Exists = false;
 						if (map[x][y] == destruct) {
 							map[x][y] = -1;
@@ -312,7 +312,7 @@ bool is_in_touch(Shell& shell, int** map) {
 			y = y / 26 + 1;
 			for (int j = 0; j < 2; j++) {
 				if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
-					if ((map[x][y] == destruct) || (map[x][y] == non_destuct)) {
+					if ((map[x][y] == destruct) || (map[x][y] == non_destruct)) {
 						shell.Exists = false;
 						if (map[x][y] == destruct) {
 							map[x][y] = -1;
@@ -330,7 +330,7 @@ bool is_in_touch(Shell& shell, int** map) {
 			y = y / 26;
 			for (int j = 0; j < 2; j++) {
 				if ((x >= 0) && (x < cols) && (y >= 0) && (y < rows)) {
-					if ((map[x][y] == destruct) || (map[x][y] == non_destuct)) {
+					if ((map[x][y] == destruct) || (map[x][y] == non_destruct)) {
 						shell.Exists = false;
 						if (map[x][y] == destruct) {
 							map[x][y] = -1;

@@ -72,7 +72,7 @@ class Tank {
 			shell.x = 0;
 			shell.y = 0;
 			x = posX;
-			y = posY;	
+			y = posY;
 			side = 0;
 			hp = 2;
 			shell.Exists = false;
@@ -509,17 +509,6 @@ int move_all(std::vector<Tank>& Tanks, Cup& cup, int** map) {
 	for (int i = 0; i < Tanks.size(); i++) {
 		if (is_in_touch(Tanks[i].shell, map)) {
 		}
-	}
-	int count_of_alive = 0;
-	int id = 0;
-	for (int i = 0; i < Tanks.size(); i++) {
-		if (Tanks[i].hp > 0) {
-			count_of_alive++;
-			id = i;
-		}
-	}
-	if (count_of_alive <= 1) {
-		return id;
 	}
 	return -1;
 }

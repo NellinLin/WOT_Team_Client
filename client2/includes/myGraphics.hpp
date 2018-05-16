@@ -7,15 +7,14 @@
 
 class ActiveTexture {
 	public:
+		int hp;
+		int side;
+
 		int biasX;
 		int biasY;
 
 		int x;
 		int y;
-
-		int hp;
-		int side;
-		bool Exists;
 
 		int x1;
 		int y1;
@@ -39,7 +38,6 @@ class ActiveTexture {
 			}
 			hp = 3;
 			side = 0;
-			Exists = true;
 			x1 = 0;
 			y1 = 0;
 		}

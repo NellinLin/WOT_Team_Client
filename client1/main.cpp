@@ -9,6 +9,10 @@
 #include "includes/myGraphics.hpp"
 #include "includes/map.hpp"
 
+const int CONTINUE_THE_GAME = 10;
+const int WIN = 20;
+const int LOSE = 30;
+
 #define rows 26
 #define cols 26
 
@@ -32,23 +36,27 @@ int main() {
 	StaticTexture On_music("interface/On.png");
 	StaticTexture Play("interface/Play.png");
 
-	std::string tank1[4] = {"pvp_draw/t011.png", "pvp_draw/t021.png", "pvp_draw/t031.png", "pvp_draw/t041.png"};
+	std::string tank1[4] = {"pvp_draw/t11_up.png", "pvp_draw/t11_right.png", "pvp_draw/t11_down.png", "pvp_draw/t11_left.png"};
 	ActiveTexture Tank1(tank1);
-
-	std::string tank2[4] = {"pvp_draw/t011.png", "pvp_draw/t022.png", "pvp_draw/t032.png", "pvp_draw/t042.png"};
+	std::string tank2[4] = {"pvp_draw/t21_up.png", "pvp_draw/t21_right.png", "pvp_draw/t21_down.png", "pvp_draw/t21_left.png"};
 	ActiveTexture Tank2(tank2);
+	std::string tank3[4] = {"pvp_draw/t31_up.png", "pvp_draw/t31_right.png", "pvp_draw/t31_down.png", "pvp_draw/t31_left.png"};
+	ActiveTexture Tank3(tank3);
 
 	std::string shell[4] = {"pvp_draw/Pula1.png", "pvp_draw/Pula2.png", "pvp_draw/Pula3.png", "pvp_draw/Pula4.png"};
 	ActiveTexture Shell1(shell);
 	ActiveTexture Shell2(shell);
+	ActiveTexture Shell3(shell);
 
 	std::vector<ActiveTexture> Tanks;
 	Tanks.push_back(Tank1);
 	Tanks.push_back(Tank2);
+	Tanks.push_back(Tank3);
 
 	std::vector<ActiveTexture> Shells;
 	Shells.push_back(Shell1);
 	Shells.push_back(Shell2);
+	Shells.push_back(Shell3);
 	for (int i = 0; i < Shells.size(); i++) {
 		Shells[i].biasX += 25;
 	}
@@ -76,7 +84,7 @@ int main() {
 		}
 		window.clear();
 		Interf_2.draw(window, 0, 0);
-		Play.draw(window, 70, 250);
+		Play.draw(window, 70, 350);
 		exit.draw(window, 840, 20);
 
 		if (exit.isPressed(window)) {
@@ -101,17 +109,13 @@ int main() {
 	// music.play();
 
 	sf::TcpSocket server;
-	sf::Socket::Status status = server.connect("127.0.0.1", 9007);
+	sf::Socket::Status status = server.connect("192.168.0.102", 9022);
 
 	if (status != sf::Socket::Done) {
 		window.close();
 		return -1;
 	}
 
-	Tanks[0].Exists = true;
-	Tanks[1].Exists = true;
-	Shells[0].Exists = false;
-	Shells[1].Exists = false;
 	int The_End = 0;
 
 	while (window.isOpen()) {
@@ -125,7 +129,6 @@ int main() {
 			server.send(packet);
 			server.disconnect();
 			window.close();
-			return 0;
 		}
 		int id = key_id();
 
@@ -136,16 +139,18 @@ int main() {
 		server.receive(packet);
 
 		packet >> The_End;
-		if (The_End >= 0) {
+		if (The_End != CONTINUE_THE_GAME) {
 			window.close();
 			server.disconnect();
-			break;
 		}
-		for (int i = 0; i < Tanks.size(); i++) {
+		int tanks_count = 0;
+		int shell_count = 0;
+		packet >> tanks_count >> shell_count;
+		for (int i = 0; i < tanks_count; i++) {
 			packet >> Tanks[i].x1 >> Tanks[i].y1 >> Tanks[i].side >> Tanks[i].hp;
 		}
-		for (int i = 0; i < Shells.size(); i++) {
-			packet >> Shells[i].x1 >> Shells[i].y1 >> Shells[i].side >> Shells[i].Exists;
+		for (int i = 0; i < shell_count; i++) {
+			packet >> Shells[i].x1 >> Shells[i].y1 >> Shells[i].side;
 		}
 		for (int i = 0; i < 2 * Tanks.size(); i++) {
 			int x = 0;
@@ -157,20 +162,22 @@ int main() {
 		}
 		packet.clear();
 
-		for (int i = 0; i < Tanks.size(); i++) {
+		for (int i = 0; i < tanks_count; i++) {
 			Tanks[i].setPossition(Tanks[i].x1, Tanks[i].y1);
 		}
-		for (int i = 0; i < Tanks.size(); i++) {
+		for (int i = 0; i < shell_count; i++) {
 			Shells[i].setPossition(Shells[i].x1, Shells[i].y1);
 		}
 
 		window.clear();
 		Game_Board.draw(window);
-		for (int i = 0; i < Tanks.size(); i++) {
-			Tanks[i].draw(window);
+		for (int i = 0; i < tanks_count; i++) {
+			if (i < Tanks.size()) {
+				Tanks[i].draw(window);
+			}
 		}
-		for (int i = 0; i < Shells.size(); i++) {
-			if (Shells[i].Exists) {
+		for (int i = 0; i < shell_count; i++) {
+			if (i < Shells.size()) {
 				if (Shells[i].side == 1) {
 					Shells[i].draw(window, Shells[i].x1 - 10, Shells[i].y1 + 20);
 				} else if (Shells[i].side == 3) {
@@ -182,6 +189,7 @@ int main() {
 				}
 			}
 		}
+
 
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
@@ -204,21 +212,5 @@ int main() {
 	}
 	// TODO: Обработку победителя: 1 - я; 0 - не я; 2 - никто не победил/кто-то отрубился
 	std::cout << The_End << std::endl;
-	switch (The_End) {
-		case 0:
-			window.clear();
-			Interf_6.draw(window, 0, 0);
-			window.display();
-			sf::sleep(sf::seconds(2));
-			window.close();
-			break;
-		case 1:
-			window.clear();
-			Interf_5.draw(window, 0, 0);
-			window.display();
-			sf::sleep(sf::seconds(2));
-			window.close();
-			break;
-	};
 	return 0;
 }
