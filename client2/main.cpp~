@@ -177,7 +177,7 @@ int main() {
 			}
 		}
 		for (int i = 0; i < shell_count; i++) {
-			if (i < Shells.size() {
+			if (i < Shells.size()) {
 				if (Shells[i].side == 1) {
 					Shells[i].draw(window, Shells[i].x1 - 10, Shells[i].y1 + 20);
 				} else if (Shells[i].side == 3) {

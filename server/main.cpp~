@@ -79,24 +79,18 @@ int main(int argc, const char *argv[]) {
 			return 0;
 		}
 
-		std::cout << " EEBOY   " << std::endl;
 		int champion = move_all(Tanks, cup, map);
-		std::cout << " EEBOY2   " << std::endl;
 		for (int i = 0; i < Tanks.size(); i++) {
 			if (Tanks[i].hp <= 0) {
 				packet.clear();
 				packet << LOSE;
-				std::cout << " EEBOY3   " << std::endl;
 				clients[num_of_client[i]].send(packet);
-				std::cout << " EEBOY4   " << std::endl;
 				for (int j = i; j < Tanks.size() - 1; j++) {
 					num_of_client[j] = num_of_client[j + 1];
 				}
-				std::cout << " EEBOY5   " << std::endl;
 				Tanks.erase(Tanks.begin() + i);
 			}
 		}
-		std::cout << " ZAZEP  " << std::endl;
 		int tanks_count = Tanks.size();
 		int shell_count = 0;
 		for (int i = 0; i < Tanks.size(); i++) {

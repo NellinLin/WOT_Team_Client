@@ -117,18 +117,23 @@ int main() {
 	}
 
 	int The_End = 0;
+	bool GAME_IS_ON = true;
 
-	while (window.isOpen()) {
+	while (window.isOpen() && GAME_IS_ON) {
 		sf::Event event;
 		sf::Packet packet;
 		window.pollEvent(event);
-		if (event.type == sf::Event::Closed) {
+		if (event.type == sf::Event::Closed || exit.isPressed(window)) {
 			id = 100;
 			packet.clear();
 			packet << id;
 			server.send(packet);
 			server.disconnect();
-			window.close();
+			if (event.type == sf::Event::Closed) {
+				window.close();
+			} else {
+				GAME_IS_ON = false;
+			}
 		}
 		int id = key_id();
 
@@ -140,9 +145,10 @@ int main() {
 
 		packet >> The_End;
 		if (The_End != CONTINUE_THE_GAME) {
-			window.close();
+			GAME_IS_ON = false;
 			server.disconnect();
 		}
+
 		int tanks_count = 0;
 		int shell_count = 0;
 		packet >> tanks_count >> shell_count;
@@ -207,10 +213,24 @@ int main() {
 			}
 		}
 		Cup.draw(window, 148, 25 * 12);
+		exit.draw(window, 840, 20);
 		window.display();
 		sf::sleep(sf::milliseconds(15));
 	}
 	// TODO: Обработку победителя: 1 - я; 0 - не я; 2 - никто не победил/кто-то отрубился
-	std::cout << The_End << std::endl;
-	return 0;
+	if (window.isOpen()) {
+		window.clear();
+		std::cout << " EE " << std::cout;
+		if (The_End == WIN) {
+			Interf_5.draw(window);
+		} else {
+			Interf_6.draw(window);
+		}
+		window.display();
+		sf::sleep(sf::seconds(2.0));
+		window.close();
+		return 1;
+	}
+	window.close();
+	return -1;
 }
