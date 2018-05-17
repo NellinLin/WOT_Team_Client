@@ -1,4 +1,3 @@
-// CLIENT1
 #include <SFML/Network.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -6,8 +5,8 @@
 #include <vector>
 #include <math.h>
 
-#include "includes/myGraphics.hpp"
-#include "includes/map.hpp"
+#include "project/include/myGraphics.hpp"
+#include "project/include/map.hpp"
 
 const int CONTINUE_THE_GAME = 10;
 const int WIN = 20;
@@ -217,10 +216,8 @@ int main() {
 		window.display();
 		sf::sleep(sf::milliseconds(15));
 	}
-	// TODO: Обработку победителя: 1 - я; 0 - не я; 2 - никто не победил/кто-то отрубился
 	if (window.isOpen()) {
 		window.clear();
-		std::cout << " EE " << std::cout;
 		if (The_End == WIN) {
 			Interf_5.draw(window);
 		} else {

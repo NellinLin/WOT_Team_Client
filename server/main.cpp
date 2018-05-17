@@ -3,31 +3,29 @@
 #include <iostream>
 #include <vector>
 
-#include "includes/tank.hpp"
-#include "includes/map.hpp"
+#include "project/include/tank.hpp"
+#include "project/include/map.hpp"
 
 const int CONTINUE_THE_GAME = 10;
 const int WIN = 20;
 const int LOSE = 30;
 
-int main(int argc, const char *argv[]) {
-	if (argc < 2) {
-		std::cerr << "COUNT_OF_ARG_IS_FEW" << std::endl;
-		return 0;
-	}
+int main() {
+	int n = 0;
+	std::cout << "Enter number of players: ";
+	std::cin >> n;
 	Cup cup;
-	int n = argv[1][0] - '0';
 	if ((n < 2) || (n > 3)) {
 		std::cerr << "COUNT_OF_PLAYERS_IS_FEW_OR_MANY" << std::endl;
 		return 0;
 	}
 	std::vector<Tank> Tanks(n);
 	for (int i = 0; i < Tanks.size() / 2; i++) {
-		Tanks[i].setPossition(100 + i * 100, 25);
-		Tanks[i].setPossition(100 + i * 100, 625);
+		Tanks[2 * i].setPossition(100 + i * 100, 20);
+		Tanks[2 * i + 1].setPossition(100 + i * 100, 625);
 	}
 	if (Tanks.size() % 2 != 0) {
-		Tanks[Tanks.size() - 1].setPossition(625, 300);
+		Tanks[Tanks.size() - 1].setPossition(625, 325);
 	}
 	sf::TcpSocket clients[n];
 	int num_of_client[n];
