@@ -83,7 +83,7 @@ int start(sf::RenderWindow& window, bool first_open) {
 		}
 		window.clear();
 		Interf_2.draw(window, 0, 0);
-		Play.draw(window, 30, 200);
+		Play.draw(window, 30, 2000);
 		exit.draw(window, 840, 20);
 
 		if (exit.isPressed(window)) {
